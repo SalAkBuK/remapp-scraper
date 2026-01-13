@@ -30,6 +30,7 @@ Node + Playwright scripts that log into `offplan.remapp.ae` and scrape off-plan 
 
 ## API
 - `GET /projects` returns cached data with metadata.
+- Optional auth: set `API_KEY` in env and send `Authorization: Bearer <key>`.
 
 ## Cron
 - `node cron_scrape.js` runs the scraper headlessly and updates `projects.json`.

@@ -3,6 +3,17 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+const API_KEY = process.env.API_KEY; // set in cPanel env vars
+
+function requireApiKey(req, res, next) {
+    if (!API_KEY) return next(); // if not set, allow (for initial setup)
+    const auth = req.headers.authorization || "";
+    const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+    if (token !== API_KEY) {
+        return res.status(401).json({ error: "Unauthorized" });
+    }
+    next();
+}
 
 const dataPath = path.join(__dirname, 'projects.json');
 const backupPath = path.join(__dirname, 'projects.json.bak');
@@ -36,7 +47,7 @@ function loadProjects() {
     }
 }
 
-app.get('/projects', (req, res) => {
+app.get('/projects', requireApiKey, (req, res) => {
     const result = loadProjects();
 
     if (result.error) {
