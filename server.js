@@ -6,7 +6,9 @@ const app = express();
 const API_KEY = process.env.API_KEY; // set in cPanel env vars
 
 function requireApiKey(req, res, next) {
-    if (!API_KEY) return next(); // if not set, allow (for initial setup)
+    if (!API_KEY) {
+        return res.status(500).json({ error: "API_KEY not configured on server" });
+    }
     const auth = req.headers.authorization || "";
     const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
     if (token !== API_KEY) {
