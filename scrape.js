@@ -76,14 +76,30 @@ async function scrape() {
 
         console.log('Finished scrolling. Extracting data...');
 
-        const projects = await page.$$eval('.card-container', (cards) => {
+        const projects = (await page.$$eval('.card-container', (cards) => {
             return cards.map(card => {
+                if (card.classList.contains('skeleton')) {
+                    return null;
+                }
                 const title = card.querySelector('.card-title')?.textContent.trim();
                 const district = card.querySelector('.card-district')?.textContent.trim();
                 const priceHeader = card.querySelector('.price_section h6');
                 const price = priceHeader ? priceHeader.textContent.trim() : null;
                 const imageEl = card.querySelector('.card-image');
-                const image = imageEl ? (imageEl.src || imageEl.getAttribute('data-src')) : null;
+                let image = null;
+                if (imageEl) {
+                    image = imageEl.getAttribute('data-src') ||
+                        imageEl.getAttribute('data-lazy') ||
+                        imageEl.getAttribute('data-original') ||
+                        imageEl.src ||
+                        imageEl.getAttribute('src');
+                    if (image && image.startsWith('data:image/')) {
+                        image = imageEl.getAttribute('data-src') ||
+                            imageEl.getAttribute('data-lazy') ||
+                            imageEl.getAttribute('data-original') ||
+                            null;
+                    }
+                }
 
                 // Get handover date - usually the last paragraph in the content
                 const paragraphs = Array.from(card.querySelectorAll('.card-content p'));
@@ -98,7 +114,7 @@ async function scrape() {
                     debug_html: !title ? card.outerHTML : null // Return HTML if title is missing for debugging
                 };
             });
-        });
+        })).filter(Boolean);
 
         console.log(`Extracted ${projects.length} projects.`);
         fs.writeFileSync('projects.json', JSON.stringify(projects, null, 2));
