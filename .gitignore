@@ -1,3 +1,5 @@
 node_modules/
 .env
 error_screenshot.png
+projects.json
+projects.json.bak
