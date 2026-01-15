@@ -1,42 +1,35 @@
-# Remapp Scraper Init
+# Remapp Scraper Init (API Flow)
 
 ## What this is
-Node + Playwright scripts that log into `offplan.remapp.ae` and scrape off-plan project data into JSON.
+Python script that calls the Remapp APIs to fetch the project list + details and saves JSON outputs for CRM use.
 
-## Key scripts
-- `scrape.js` logs in, scrolls the project list, and writes `projects.json`.
-- `scrape_details.js` logs in, opens the first project, and writes `single_project_detail.json`.
-- `inspect_html.js` searches `detail_page.html` for keywords to help refine selectors.
+## Key script
+- `dist/fetch_public_projects.py`
 
 ## Inputs
-- `.env` needs:
-  - `REMAPP_EMAIL`
+- `.env` supports:
+  - `REMAPP_BEARER_TOKEN` (optional; auto-login will set it)
+  - `REMAPP_USERNAME` or `REMAPP_EMAIL`
   - `REMAPP_PASSWORD`
 
-## Outputs and artifacts
-- `projects.json`: array of project cards with `title`, `district`, `price`, `image`, `handover`.
-- `single_project_detail.json`: basic detail extraction (title, amenities, payment plan).
-- Screenshots: `final_screenshot.png`, plus any error screenshots.
-- HTML captures: `dashboard.html`, `detail_page.html` and their preview images.
+## Outputs (all in `dist/`)
+- `projects_from_api.json`: list view data (cards).
+- `projects_details.json`: full details array.
+- `projects_merged.json`: list items with `details` attached.
+- `projects_details_by_fk.json`: map of list `id` -> detail.
+- `projects_details.jsonl`: detail cache for resume.
+- `projects_details_errors.jsonl`: any invalid detail responses.
 
 ## How to run
-1. `npm install`
-2. Set credentials in `.env` (see `.env.example`).
-3. Run one of:
-   - `node scrape.js`
-   - `node scrape_details.js`
-4. Start the API:
-   - `node server.js`
+1. Set credentials in `.env` (see `.env.example`).
+2. Run:
+   - `python remapp_scraper/dist/fetch_public_projects.py`
 
-## API
-- `GET /projects` returns cached data with metadata.
-- Optional auth: set `API_KEY` in env and send `Authorization: Bearer <key>`.
+## Flags
+- `REMAPP_USE_LOCAL_LIST=1` (default): use cached `projects_from_api.json`.
+- `REMAPP_USE_LOCAL_LIST=0`: fetch a fresh list from the API.
+- `REMAPP_REHYDRATE_ONLY=1`: rebuild outputs from JSONL without API calls.
 
 ## Cron
-- `node cron_scrape.js` runs the scraper headlessly and updates `projects.json`.
-- Uses `projects.json.bak` as a fallback if the new JSON is invalid.
-
-## Notes
-- Both scrapers run with `headless: false` for debugging.
-- The details scraper currently clicks only the first project card.
-- The sample detail output may include noisy `title` values if the page structure changes.
+- Run `python remapp_scraper/dist/fetch_public_projects.py` on a schedule.
+  - It resumes from `projects_details.jsonl` and only fetches missing details.
