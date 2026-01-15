@@ -17,7 +17,8 @@ function requireApiKey(req, res, next) {
     next();
 }
 
-const dataPath = path.join(__dirname, 'projects.json');
+const listPath = path.join(__dirname, 'dist', 'projects_from_api.json');
+const detailsPath = path.join(__dirname, 'dist', 'projects_details_by_fk.json');
 const backupPath = path.join(__dirname, 'projects.json.bak');
 const cacheTtlMs = 24 * 60 * 60 * 1000;
 
@@ -35,9 +36,9 @@ function getFileStats(filePath) {
 
 function loadProjects() {
     try {
-        const data = readJsonFile(dataPath);
-        const stats = getFileStats(dataPath);
-        return { data, stats, source: 'projects.json' };
+        const data = readJsonFile(listPath);
+        const stats = getFileStats(listPath);
+        return { data, stats, source: 'dist/projects_from_api.json' };
     } catch (error) {
         try {
             const data = readJsonFile(backupPath);
@@ -55,10 +56,17 @@ app.get('/projects', requireApiKey, (req, res) => {
     if (result.error) {
         res.status(503).json({
             error: 'Cached data unavailable',
-            details: 'projects.json and projects.json.bak could not be read'
+            details: 'dist/projects_from_api.json and projects.json.bak could not be read'
         });
         return;
     }
+
+    const page = Math.max(parseInt(req.query.page || '1', 10), 1);
+    const perPage = Math.max(parseInt(req.query.per_page || '20', 10), 1);
+    const total = Array.isArray(result.data) ? result.data.length : 0;
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+    const pageData = Array.isArray(result.data) ? result.data.slice(start, end) : [];
 
     const ageMs = Date.now() - result.stats.mtimeMs;
     const ageHours = Math.round((ageMs / (60 * 60 * 1000)) * 10) / 10;
@@ -68,9 +76,35 @@ app.get('/projects', requireApiKey, (req, res) => {
         lastUpdated: new Date(result.stats.mtimeMs).toISOString(),
         ageHours,
         isStale: ageMs > cacheTtlMs,
-        count: Array.isArray(result.data) ? result.data.length : null,
-        data: result.data
+        count: total,
+        page,
+        per_page: perPage,
+        total,
+        data: pageData
     });
+});
+
+app.get('/projects/:id', requireApiKey, (req, res) => {
+    const id = Number(req.params.id);
+    if (!Number.isInteger(id)) {
+        res.status(400).json({ error: 'Invalid id' });
+        return;
+    }
+
+    try {
+        const details = readJsonFile(detailsPath);
+        const detail = details && details[id];
+        if (!detail) {
+            res.status(404).json({ error: 'Not found' });
+            return;
+        }
+        res.json(detail);
+    } catch (error) {
+        res.status(503).json({
+            error: 'Details unavailable',
+            details: 'dist/projects_details_by_fk.json could not be read'
+        });
+    }
 });
 
 const port = process.env.PORT || 3000;
