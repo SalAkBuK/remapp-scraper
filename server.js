@@ -12,6 +12,9 @@ function requireApiKey(req, res, next) {
     const auth = req.headers.authorization || "";
     const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
     if (token !== API_KEY) {
+        console.warn(
+            `[auth] Unauthorized ${req.method} ${req.originalUrl} ip=${req.ip}`
+        );
         return res.status(401).json({ error: "Unauthorized" });
     }
     next();
@@ -82,6 +85,10 @@ app.get('/projects', requireApiKey, (req, res) => {
         total,
         data: pageData
     });
+});
+
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', time: new Date().toISOString() });
 });
 
 app.get('/projects/:id', requireApiKey, (req, res) => {
