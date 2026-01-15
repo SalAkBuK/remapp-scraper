@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { exec } = require('child_process');
 
 const app = express();
 const API_KEY = process.env.API_KEY; // set in cPanel env vars
@@ -112,6 +113,38 @@ app.get('/projects/:id', requireApiKey, (req, res) => {
             details: 'dist/projects_details_by_fk.json could not be read'
         });
     }
+});
+
+app.post('/refresh', requireApiKey, (req, res) => {
+    const pythonScript = path.join(__dirname, 'dist', 'fetch_public_projects.py');
+    const forceFullFetch = req.query.full === 'true' || req.query.full === '1';
+
+    const env = { ...process.env };
+    if (forceFullFetch) {
+        env.REMAPP_INCREMENTAL_MODE = '0';
+        env.REMAPP_USE_LOCAL_LIST = '0';
+    } else {
+        env.REMAPP_INCREMENTAL_MODE = '1';
+    }
+
+    exec(`python "${pythonScript}"`, { env }, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Refresh error: ${error.message}`);
+            res.status(500).json({
+                error: 'Refresh failed',
+                message: error.message,
+                stderr: stderr
+            });
+            return;
+        }
+
+        console.log(`Refresh output: ${stdout}`);
+        res.json({
+            success: true,
+            mode: forceFullFetch ? 'full' : 'incremental',
+            output: stdout
+        });
+    });
 });
 
 const port = process.env.PORT || 3000;

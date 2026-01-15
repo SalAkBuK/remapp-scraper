@@ -20,6 +20,7 @@ DETAILS_JSONL_PATH = OUTPUT_DIR / "projects_details.jsonl"
 LOG_EVERY = 50
 LIST_CACHE_PATH = OUTPUT_DIR / "projects_from_api.json"
 DETAILS_ERROR_PATH = OUTPUT_DIR / "projects_details_errors.jsonl"
+INCREMENTAL_STATE_PATH = OUTPUT_DIR / "incremental_state.json"
 
 
 def load_env_file(path: Path) -> None:
@@ -152,6 +153,45 @@ def extract_token(payload: Any) -> Optional[str]:
     return None
 
 
+def load_incremental_state() -> Optional[Dict[str, Any]]:
+    """Load the last incremental fetch state."""
+    if not INCREMENTAL_STATE_PATH.is_file():
+        return None
+    try:
+        return json.loads(INCREMENTAL_STATE_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
+def save_incremental_state(projects: List[Dict[str, Any]]) -> None:
+    """Save the current fetch state for incremental updates."""
+    if not projects:
+        return
+    
+    highest_id = max((p.get("id") for p in projects if isinstance(p.get("id"), int)), default=0)
+    newest_created_at = None
+    
+    for project in projects:
+        created = project.get("created_at")
+        if isinstance(created, str):
+            if newest_created_at is None or created > newest_created_at:
+                newest_created_at = created
+    
+    state = {
+        "last_fetch_timestamp": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+        "highest_project_id": highest_id,
+        "newest_created_at": newest_created_at,
+        "total_projects": len(projects)
+    }
+    
+    INCREMENTAL_STATE_PATH.write_text(json.dumps(state, ensure_ascii=True, indent=2), encoding="utf-8")
+
+
+def is_project_in_list(project_id: int, existing_projects: List[Dict[str, Any]]) -> bool:
+    """Check if a project ID exists in the existing project list."""
+    return any(p.get("id") == project_id for p in existing_projects if isinstance(p, dict))
+
+
 def fetch_detail_with_retry(
     slug: Optional[str], project_id: Optional[int], token: Optional[str]
 ) -> Dict[str, Any]:
@@ -188,10 +228,80 @@ def main() -> None:
 
     all_projects: List[Dict[str, Any]] = []
     use_local_list = os.environ.get("REMAPP_USE_LOCAL_LIST", "1").strip() in {"1", "true", "yes"}
-    if use_local_list and LIST_CACHE_PATH.is_file():
-        # Temporary shortcut to avoid re-fetching the list on every run.
-        all_projects = json.loads(LIST_CACHE_PATH.read_text(encoding="utf-8"))
-        print(f"Loaded {len(all_projects)} list items from {LIST_CACHE_PATH}")
+    incremental_mode = os.environ.get("REMAPP_INCREMENTAL_MODE", "1").strip() in {"1", "true", "yes"}
+    
+    # Load existing projects if available
+    existing_projects: List[Dict[str, Any]] = []
+    if LIST_CACHE_PATH.is_file():
+        try:
+            existing_projects = json.loads(LIST_CACHE_PATH.read_text(encoding="utf-8"))
+            print(f"Loaded {len(existing_projects)} existing projects from {LIST_CACHE_PATH}")
+        except (json.JSONDecodeError, OSError):
+            existing_projects = []
+    
+    # Load incremental state
+    incremental_state = load_incremental_state() if incremental_mode else None
+    
+    if use_local_list and existing_projects and not incremental_mode:
+        # Use cached list without incremental update
+        all_projects = existing_projects
+        print(f"Using cached list: {len(all_projects)} projects (incremental mode disabled)")
+    elif incremental_mode and existing_projects and incremental_state:
+        # Incremental mode: fetch only new projects
+        print(f"Incremental mode: checking for new projects (last highest ID: {incremental_state.get('highest_project_id')})")
+        new_projects: List[Dict[str, Any]] = []
+        page = 1
+        found_existing = False
+        
+        while not found_existing:
+            try:
+                payload = fetch_page(page, None)
+            except requests.HTTPError as exc:
+                status = exc.response.status_code if exc.response is not None else None
+                if status in {401, 403}:
+                    if not token and username and password:
+                        token = login(username, password)
+                        save_env_value(ENV_PATH, "REMAPP_BEARER_TOKEN", token)
+                        os.environ["REMAPP_BEARER_TOKEN"] = token
+                    if not token:
+                        raise SystemExit(
+                            "API requires auth. Set REMAPP_BEARER_TOKEN or login creds in remapp_scraper/.env"
+                        ) from exc
+                    payload = fetch_page(page, token)
+                else:
+                    raise
+            
+            page_projects = extract_projects(payload)
+            if not page_projects:
+                break
+            
+            # Check if we've reached projects we already have
+            for project in page_projects:
+                project_id = project.get("id")
+                if isinstance(project_id, int) and is_project_in_list(project_id, existing_projects):
+                    found_existing = True
+                    break
+                new_projects.append(project)
+            
+            if found_existing:
+                break
+            
+            page += 1
+            # Safety limit: don't fetch more than 10 pages in incremental mode
+            if page > 10:
+                print("Warning: Reached page limit in incremental mode, switching to full fetch")
+                incremental_mode = False
+                break
+        
+        if new_projects:
+            print(f"Found {len(new_projects)} new projects")
+            # Prepend new projects to existing list
+            all_projects = new_projects + existing_projects
+            LIST_CACHE_PATH.write_text(json.dumps(all_projects, ensure_ascii=True, indent=2))
+            print(f"Updated cache with {len(all_projects)} total projects")
+        else:
+            print("No new projects found")
+            all_projects = existing_projects
     else:
         page = 1
 
@@ -378,6 +488,11 @@ def main() -> None:
     details_by_fk_path = OUTPUT_DIR / "projects_details_by_fk.json"
     details_by_fk_path.write_text(json.dumps(details_by_fk, ensure_ascii=True, indent=2))
     print(f"Saved {len(details_by_fk)} details by fk to {details_by_fk_path}")
+    
+    # Save incremental state for next run
+    if incremental_mode and all_projects:
+        save_incremental_state(all_projects)
+        print(f"Saved incremental state to {INCREMENTAL_STATE_PATH}")
 
 
 if __name__ == "__main__":
