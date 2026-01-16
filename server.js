@@ -145,7 +145,7 @@ app.post('/refresh', requireApiKey, (req, res) => {
         env.REMAPP_INCREMENTAL_MODE = '1';
     }
 
-    exec(`python "${pythonScript}"`, { env }, (error, stdout, stderr) => {
+    exec(`python3 "${pythonScript}"`, { env }, (error, stdout, stderr) => {
         if (error) {
             console.error(`Refresh error: ${error.message}`);
             res.status(500).json({
