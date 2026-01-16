@@ -218,6 +218,10 @@ def main() -> None:
     rehydrate_only = (
         os.environ.get("REMAPP_REHYDRATE_ONLY", "0").strip().lower() in {"1", "true", "yes"}
     )
+    force_detail_refresh = (
+        os.environ.get("REMAPP_FORCE_DETAIL_REFRESH", "1").strip().lower()
+        in {"1", "true", "yes"}
+    )
     token = os.environ.get("REMAPP_BEARER_TOKEN")
     username = os.environ.get("REMAPP_USERNAME") or os.environ.get("REMAPP_EMAIL")
     password = os.environ.get("REMAPP_PASSWORD")
@@ -339,7 +343,7 @@ def main() -> None:
     details: List[Dict[str, Any]] = []
     seen_ids: set[int] = set()
     seen_slugs: set[str] = set()
-    if DETAILS_JSONL_PATH.is_file():
+    if DETAILS_JSONL_PATH.is_file() and not force_detail_refresh:
         for raw_line in DETAILS_JSONL_PATH.read_text(encoding="utf-8").splitlines():
             raw_line = raw_line.strip()
             if not raw_line:
@@ -366,8 +370,10 @@ def main() -> None:
         total = len(all_projects)
         skipped = 0
         missing_details = 0
-        with DETAILS_JSONL_PATH.open("a", encoding="utf-8") as progress_file:
-            error_file = DETAILS_ERROR_PATH.open("a", encoding="utf-8")
+        details_mode = "w" if force_detail_refresh else "a"
+        error_mode = "w" if force_detail_refresh else "a"
+        with DETAILS_JSONL_PATH.open(details_mode, encoding="utf-8") as progress_file:
+            error_file = DETAILS_ERROR_PATH.open(error_mode, encoding="utf-8")
             for index, item in enumerate(all_projects, start=1):
                 slug = item.get("slug") if isinstance(item, dict) else None
                 project_id = item.get("id") if isinstance(item, dict) else None
@@ -378,12 +384,13 @@ def main() -> None:
                         print(f"Progress: {index}/{total} (skipped {skipped})")
                     continue
 
-                if (isinstance(project_id, int) and project_id in seen_ids) or (
-                    isinstance(slug, str) and slug in seen_slugs
-                ):
-                    if index % LOG_EVERY == 0:
-                        print(f"Progress: {index}/{total} (cached)")
-                    continue
+                if not force_detail_refresh:
+                    if (isinstance(project_id, int) and project_id in seen_ids) or (
+                        isinstance(slug, str) and slug in seen_slugs
+                    ):
+                        if index % LOG_EVERY == 0:
+                            print(f"Progress: {index}/{total} (cached)")
+                        continue
 
                 try:
                     detail_payload = fetch_detail_with_retry(slug, project_id, token)

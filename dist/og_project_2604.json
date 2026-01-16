@@ -1,0 +1,528 @@
+{
+  "status": true,
+  "message": "Project Detail",
+  "data": {
+    "id": 2604,
+    "slug": "amra-residences",
+    "title": "Amra Residences",
+    "types": "Apartment",
+    "property_types": [
+      "Apartment"
+    ],
+    "images": {
+      "feature": "https://files.remapp.ae/rem/projects_content/feature_image/HiLBViUklEUQ4A7ZrnVXw8OLmWVb18hkI7bsXeZg.jpg",
+      "interior": [
+        "https://files.remapp.ae/rem/projects_content/amra-residences/interiorImage_0.jpg",
+        "https://files.remapp.ae/rem/projects_content/amra-residences/interiorImage_1.png",
+        "https://files.remapp.ae/rem/projects_content/project_interior_images/dyHuIrjh5mltclIqIyMAclcqX7vFW3P1tGbbqpyg.jpg",
+        "https://files.remapp.ae/rem/projects_content/project_interior_images/HYqGnBSlPaWrYZF5AMVA1MuTQRi8hDSz36hGSDHE.jpg",
+        "https://files.remapp.ae/rem/projects_content/project_interior_images/7Fq47GP3IYZ7Hnbvoryqd003bTt1G560XlKVQgiT.jpg",
+        "https://files.remapp.ae/rem/projects_content/project_interior_images/EtI4O6P1Fpa980VpuXA1pFCbRFaDOEAjN6IZAeMF.jpg",
+        "https://files.remapp.ae/rem/projects_content/project_interior_images/nja4MIQgrbPYfk3DRGmz2BdvLPHcNEleLb4PzMd3.jpg",
+        "https://files.remapp.ae/rem/projects_content/project_interior_images/SfjeX8H5eWfts5TmPmlkzggUiaDQyzbJzi9WBorl.jpg",
+        "https://files.remapp.ae/rem/projects_content/project_interior_images/zObHbGROoThKH01pU4sjmxCU558w0tKBqRCq8AiU.jpg"
+      ],
+      "general": [
+        "https://files.remapp.ae/rem/projects_content/general_plan_images/2ePifVvIskZGc0Z4jQMI56nX334jVUwdVdo78XB3.jpg"
+      ],
+      "other": [
+        "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_0.jpg",
+        "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_1.jpg",
+        "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_2.png",
+        "https://files.remapp.ae/rem/projects_content/project/a3ebyemQU7jcGpvRKv67QHu1BPFZhJdKsFwYTJPt.jpg",
+        "https://files.remapp.ae/rem/projects_content/project/CNP3zEdaORSq8AfBx8gKI2krWKHUkAKVXxlDGnq5.jpg"
+      ],
+      "exterior": [
+        "https://files.remapp.ae/rem/projects_content/exterior_images/RaGESwKhHlLXh5RkgdzhCKbysCERVWimo853XBgv.jpg",
+        "https://files.remapp.ae/rem/projects_content/exterior_images/SBBcvXtv3DQEg2fwgsd4zL8C7Ej1Klsg0ZNltdnq.jpg"
+      ],
+      "lobby": []
+    },
+    "all_images": [
+      "https://files.remapp.ae/rem/projects_content/feature_image/HiLBViUklEUQ4A7ZrnVXw8OLmWVb18hkI7bsXeZg.jpg",
+      "https://files.remapp.ae/rem/projects_content/amra-residences/interiorImage_0.jpg",
+      "https://files.remapp.ae/rem/projects_content/amra-residences/interiorImage_1.png",
+      "https://files.remapp.ae/rem/projects_content/project_interior_images/dyHuIrjh5mltclIqIyMAclcqX7vFW3P1tGbbqpyg.jpg",
+      "https://files.remapp.ae/rem/projects_content/project_interior_images/HYqGnBSlPaWrYZF5AMVA1MuTQRi8hDSz36hGSDHE.jpg",
+      "https://files.remapp.ae/rem/projects_content/project_interior_images/7Fq47GP3IYZ7Hnbvoryqd003bTt1G560XlKVQgiT.jpg",
+      "https://files.remapp.ae/rem/projects_content/project_interior_images/EtI4O6P1Fpa980VpuXA1pFCbRFaDOEAjN6IZAeMF.jpg",
+      "https://files.remapp.ae/rem/projects_content/project_interior_images/nja4MIQgrbPYfk3DRGmz2BdvLPHcNEleLb4PzMd3.jpg",
+      "https://files.remapp.ae/rem/projects_content/project_interior_images/SfjeX8H5eWfts5TmPmlkzggUiaDQyzbJzi9WBorl.jpg",
+      "https://files.remapp.ae/rem/projects_content/project_interior_images/zObHbGROoThKH01pU4sjmxCU558w0tKBqRCq8AiU.jpg",
+      "https://files.remapp.ae/rem/projects_content/general_plan_images/2ePifVvIskZGc0Z4jQMI56nX334jVUwdVdo78XB3.jpg",
+      "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_0.jpg",
+      "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_1.jpg",
+      "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_2.png",
+      "https://files.remapp.ae/rem/projects_content/project/a3ebyemQU7jcGpvRKv67QHu1BPFZhJdKsFwYTJPt.jpg",
+      "https://files.remapp.ae/rem/projects_content/project/CNP3zEdaORSq8AfBx8gKI2krWKHUkAKVXxlDGnq5.jpg",
+      "https://files.remapp.ae/rem/projects_content/exterior_images/RaGESwKhHlLXh5RkgdzhCKbysCERVWimo853XBgv.jpg",
+      "https://files.remapp.ae/rem/projects_content/exterior_images/SBBcvXtv3DQEg2fwgsd4zL8C7Ej1Klsg0ZNltdnq.jpg"
+    ],
+    "description": "<strong>Project General Facts</strong><br><strong>Amra Residences</strong> sets a new standard for wellness-inspired living, seamlessly combining hospitality and holistic design in three elegant sea-facing towers in<strong>&nbsp;Umm Al Quwain</strong>. The project was developed with a focus on balance and longevity, reflecting an architectural philosophy centered on tranquility, sustainability, and a connection to nature. Each building blends harmoniously with the surrounding lagoon and mangroves, creating an environment where serenity and sophistication coexist.<br><br>Residents are welcomed into a refined sanctuary designed around the principles of integrative wellness. Each apartment comes fully furnished and serviced, featuring spacious balconies, biophilic interiors, and a calming palette of natural materials. The thoughtful design promotes well-being while providing flexibility for both permanent residents and those seeking a reprieve from the fast pace of modern life. With interiors curated by renowned design studios such as 1508 London, TRUSH Design, and Design Nomad, Amra showcases a global collaboration of craftsmanship and innovation.<br><br>The project's amenities redefine resort-style living, offering over 100 facilities dedicated to wellness, leisure, and social connection. Residents can indulge in infinity pools with views of the lagoon, a cutting-edge gym, yoga and pilates studios, spa areas, organic dining options, and private beach clubs. In addition to physical wellness, Amra nurtures emotional and intellectual harmony through art galleries, co-working spaces, and areas for meditation and community gatherings \u2014 creating a holistic ecosystem for the body, mind, and spirit.<br><br><strong>Finishing and Materials</strong><br>Modern finishes using high-quality materials.<br><br><strong>Kitchen and Appliances</strong><br>Fully equipped kitchens.<br><br><strong>Furnishing</strong><br>Fully furnished.<br><br><strong>Location Description and Benefits</strong><br>Umm Al Quwain, one of the UAE's most serene emirates, offers a unique blend of tranquility and opportunity. Away from the hustle and bustle of city life, it provides a peaceful coastal lifestyle with pristine beaches, crystal-clear waters, and lush mangroves that form a natural retreat. The emirate\u2019s appeal lies in its simplicity and authenticity, offering residents a slower pace of life without compromising on modern comforts.<br><br>Beyond its natural splendor, Umm Al Quwain is quickly becoming a center for sustainable and wellness-focused living. The emirate\u2019s leadership is investing in eco-friendly developments, cultural preservation, and infrastructure that promotes well-being and community engagement. Its proximity \u2014 just a short drive from Dubai and Sharjah \u2014 allows residents to enjoy both the peace of nature and easy access to the UAE's major business and leisure destinations.<br><br>For those seeking harmony, Umm Al Quwain offers a rare blend of heritage and modernity. With its expanding hospitality sector, marinas, and family-friendly attractions, it is becoming a destination for those who prioritize mindfulness, security, and a strong sense of belonging. Living here means embracing a lifestyle characterized by peace, space, and the timeless beauty of the Arabian Gulf.",
+    "latlong": "25.5772625,55.5652031",
+    "location": "HHG8+W34 Umm Al Quwain - Emirate of Umm Al Quwain - United Arab Emirates",
+    "map_url": "https://www.google.com/maps?q=25.5772625,55.5652031&z=15",
+    "map_img": "https://maps.googleapis.com/maps/api/staticmap?markers=color:red%7C25.5772625,55.5652031&center=25.5772625,55.5652031&zoom=14&scale=2&size=1080x540&q=Amra+Residences&key=AIzaSyC7tpVKb1AFQlP3LEz88zaWCiLvQRRRvwE",
+    "expected_completion_date": "2028-12-31",
+    "project_completed": false,
+    "website": [
+      {
+        "website_title": "Developer Website",
+        "website_url": "https://citideveloper.com/"
+      }
+    ],
+    "attachments": [
+      {
+        "attachment_title": "Brochure",
+        "attachment_url": "https://my.remapp.ae/attachment/download/pl782q",
+        "file_type": "pdf"
+      },
+      {
+        "attachment_title": "Floor Plan",
+        "attachment_url": "https://my.remapp.ae/attachment/download/pl782r",
+        "file_type": "pdf"
+      }
+    ],
+    "youtube_links": [],
+    "sales_executives": [],
+    "buildings": [
+      {
+        "building_id": 90693,
+        "building_image": "https://files.remapp.ae/rem/projects_content/project_building_image/OC4ljPDHCHs7HwpCsNsupqq16IRQHQunLa2snzZY.png",
+        "title": "Building",
+        "description": "",
+        "total_properties": 0,
+        "floors": null
+      }
+    ],
+    "typical_units": [
+      {
+        "bedroom": "0",
+        "lowest_price": "690000.00",
+        "highest_price": "690000.00",
+        "display_currency": "AED",
+        "area_size": "sqft",
+        "lowest_area": "500",
+        "highest_area": "500",
+        "property_types": "Apartment",
+        "images": [
+          "https://files.remapp.ae/rem/projects_content/unit_structure_image/yE4jLDksvFTBaCzswf1MpLLrNcCv6TXmuEzlfVhh.jpg"
+        ]
+      },
+      {
+        "bedroom": "1",
+        "lowest_price": "1100000.00",
+        "highest_price": "1100000.00",
+        "display_currency": "AED",
+        "area_size": "sqft",
+        "lowest_area": "846",
+        "highest_area": "846",
+        "property_types": "Apartment",
+        "images": [
+          "https://files.remapp.ae/rem/projects_content/unit_structure_image/ow4lNOs9DxLeBX1dcEpCnkQhnRK4Opt0WjzHcdLH.jpg"
+        ]
+      },
+      {
+        "bedroom": "2",
+        "lowest_price": "1600000.00",
+        "highest_price": "1600000.00",
+        "display_currency": "AED",
+        "area_size": "sqft",
+        "lowest_area": "1387",
+        "highest_area": "1387",
+        "property_types": "Apartment",
+        "images": [
+          "https://files.remapp.ae/rem/projects_content/unit_structure_image/3NtwpYj6KQ5L7MTaWGYikIUwRxM8F6bZUgwXEOGF.jpg"
+        ]
+      },
+      {
+        "bedroom": "3",
+        "lowest_price": "1850000.00",
+        "highest_price": "1850000.00",
+        "display_currency": "AED",
+        "area_size": "sqft",
+        "lowest_area": "1915",
+        "highest_area": "1915",
+        "property_types": "Apartment",
+        "images": [
+          "https://files.remapp.ae/rem/projects_content/unit_structure_image/fUTW1keivseo2JmJJsNwKOzqtYUBeOyuiHegVzDP.jpg"
+        ]
+      },
+      {
+        "bedroom": "4",
+        "lowest_price": "4100000.00",
+        "highest_price": "4100000.00",
+        "display_currency": "AED",
+        "area_size": "sqft",
+        "lowest_area": "2937",
+        "highest_area": "2937",
+        "property_types": "Apartment",
+        "images": [
+          "https://files.remapp.ae/rem/projects_content/unit_structure_image/z2wn26S0L83CJQcCrzVeT6ZAgKZ8zZHfhM7pFuhd.jpg"
+        ]
+      }
+    ],
+    "parkings": null,
+    "currency": "AED",
+    "price_start": "690000.00",
+    "price_end": "4100000.00",
+    "area_size": "sqft",
+    "country_data": {
+      "id": 1,
+      "name": "United Arab Emirates"
+    },
+    "city_data": {
+      "id": 6,
+      "name": "Umm Al Quwain"
+    },
+    "district_data": [
+      {
+        "id": 182,
+        "name": "Umm al-Quwain"
+      }
+    ],
+    "area_start": "500",
+    "area_end": "2937",
+    "beds": "0,1,2,3,4",
+    "baths": null,
+    "amenities_and_features": {
+      "amenities": [],
+      "features_names": []
+    },
+    "facilities": [
+      {
+        "id": 23381,
+        "name": "All Day Dining Restaurant",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/all_day_dining_restaurant_2604_20251015_062517/facilities_all_day_dining_restaurant.jpg"
+      },
+      {
+        "id": 23382,
+        "name": "Spa",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/spa_2604_20251015_062533/facilities_spa.jpg"
+      },
+      {
+        "id": 23383,
+        "name": "Salt Room",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/salt_room_2604_20251015_062545/facilities_salt_room.jpg"
+      },
+      {
+        "id": 23384,
+        "name": "Panoramic Sea View Gym",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/panoramic_sea_view_gym_2604_20251015_062601/facilities_panoramic_sea_view_gym.jpg"
+      },
+      {
+        "id": 23385,
+        "name": "Pilates Studio",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/pilates_studio_2604_20251015_062617/facilities_pilates_studio.jpg"
+      },
+      {
+        "id": 23386,
+        "name": "Yoga Studio",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/yoga_studio_2604_20251015_062633/facilities_yoga_studio.jpg"
+      },
+      {
+        "id": 23387,
+        "name": "Boxing Ring",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/boxing_ring_2604_20251015_062641/facilities_boxing_ring.jpg"
+      },
+      {
+        "id": 23388,
+        "name": "Punching Bag Studio",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/punching_bag_studio_2604_20251015_062656/facilities_punching_bag_studio.jpg"
+      },
+      {
+        "id": 23389,
+        "name": "HIIT Studio",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/hiit_studio_2604_20251015_062713/facilities_hiit_studio.jpg"
+      },
+      {
+        "id": 23390,
+        "name": "Squash Court",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/squash_court_2604_20251015_062727/facilities_squash_court.jpg"
+      },
+      {
+        "id": 23391,
+        "name": "Bowling Lanes",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/bowling_lanes_2604_20251015_062743/facilities_bowling_lanes.jpg"
+      },
+      {
+        "id": 23392,
+        "name": "Paint & Pots Cafe",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/paint_&_pots_cafe_2604_20251015_062758/facilities_paint_&_pots_cafe.jpg"
+      },
+      {
+        "id": 23393,
+        "name": "Golf Simulator",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/golf_simulator_2604_20251015_062812/facilities_golf_simulator.jpg"
+      },
+      {
+        "id": 23394,
+        "name": "Self Scoring Darts",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/self_scoring_darts_2604_20251015_062826/facilities_self_scoring_darts.jpg"
+      },
+      {
+        "id": 23395,
+        "name": "Billiard Table",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/billiard_table_2604_20251015_062841/facilities_billiard_table.jpg"
+      },
+      {
+        "id": 23396,
+        "name": "Retro Arcade & Driving Simulator",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/retro_arcade_&_driving_simulator_2604_20251015_062855/facilities_retro_arcade_&_driving_simulator.jpg"
+      },
+      {
+        "id": 23397,
+        "name": "Multi Purpose Conference Room",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/multi_purpose_conference_room_2604_20251015_062910/facilities_multi_purpose_conference_room.jpg"
+      },
+      {
+        "id": 23398,
+        "name": "Multi Purpose Communal Area",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/multi_purpose_communal_area_2604_20251015_062926/facilities_multi_purpose_communal_area.jpg"
+      },
+      {
+        "id": 23399,
+        "name": "Multi Purpose Co-Working Area",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/multi_purpose_co-working_area_2604_20251015_062942/facilities_multi_purpose_co-working_area.jpg"
+      },
+      {
+        "id": 23400,
+        "name": "Private Cinema",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/private_cinema_2604_20251015_062957/facilities_private_cinema.jpg"
+      },
+      {
+        "id": 23401,
+        "name": "Networking Lounge",
+        "description": "Visualisation from developer",
+        "image": "https://files.remapp.ae/rem/projects_content/networking_lounge_2604_20251015_063013/facilities_networking_lounge.jpg"
+      }
+    ],
+    "total_properties": "0",
+    "has_property": false,
+    "created_at": "2025-10-15T06:25:03.000000Z",
+    "public_url": "https://my.remapp.ae/project/amra-residences",
+    "developer_name": "Citi Developers",
+    "developer_email": "info@citidevelopers.com",
+    "developer_id": 2964,
+    "developer_image": "https://files.remapp.ae/rem/developers/citi-developers/developer-logo.jpg",
+    "developer_website": null,
+    "developer_address": "Villa no 1 & 2 - 625 Jumeira St - Umm Suqeim - Umm Suqeim 1 - Dubai",
+    "developer_working_time": null,
+    "developer_description": "<p>With a legacy of over a decade, we proudly stand as a world-leading master developer, renowned for reshaping cityscapes and enriching communities across continents.</p><p>At Citi, trust is our foundation, and experience, our currency. We understand how our residents and investors think, and we apply this knowledge in everything we do. We know that trust takes time, resources, and years to build, and we are proud to have earned and perfected it over the past decade. Join us on this journey of trust, innovation, and exceptional living experiences as we reinvent real estate landscapes across cities.</p><p><br></p><p><br></p><p><br></p><p><br></p><p><br></p><p><br></p>",
+    "developer_phone": "97142764000",
+    "developers_data": [
+      {
+        "id": 2964,
+        "type": "Developer",
+        "is_custom_developer": false,
+        "name": "Citi Developers",
+        "email": "info@citidevelopers.com",
+        "image": "https://files.remapp.ae/rem/developers/citi-developers/developer-logo.jpg",
+        "website": "https://citideveloper.com",
+        "address": "Villa no 1 & 2 - 625 Jumeira St - Umm Suqeim - Umm Suqeim 1 - Dubai",
+        "working_time": {
+          "Monday": "10:00 AM - 6:00 PM",
+          "Tuesday": "10:00 AM - 6:00 PM",
+          "Wednesday": "10:00 AM - 6:00 PM",
+          "Thursday": "10:00 AM - 6:00 PM",
+          "Friday": "10:00 AM - 6:00 PM",
+          "Saturday": "10:00 AM - 6:00 PM",
+          "Sunday": "Day off"
+        },
+        "description": "<p>With a legacy of over a decade, we proudly stand as a world-leading master developer, renowned for reshaping cityscapes and enriching communities across continents.</p><p>At Citi, trust is our foundation, and experience, our currency. We understand how our residents and investors think, and we apply this knowledge in everything we do. We know that trust takes time, resources, and years to build, and we are proud to have earned and perfected it over the past decade. Join us on this journey of trust, innovation, and exceptional living experiences as we reinvent real estate landscapes across cities.</p><p><br></p><p><br></p><p><br></p><p><br></p><p><br></p><p><br></p>"
+      }
+    ],
+    "format_created_at": "3 months ago",
+    "format_updated_at": null,
+    "pdf_url": null,
+    "project_status": "Pre Sale",
+    "commission_percentage": 0,
+    "parking_json": [
+      {
+        "title": "parkings",
+        "data": [
+          {
+            "studio,1br,2br apartments": "1 parking"
+          },
+          {
+            "3br,4br apartments": "2 parkings"
+          }
+        ]
+      }
+    ],
+    "payment_plans_json": [
+      {
+        "title": "3 Years Post Handover Payment Plan",
+        "data": [
+          {
+            "70% Payment": "During construction"
+          },
+          {
+            "30% Payment": "Within 36 months PH"
+          }
+        ],
+        "conditions": [
+          {
+            "EOI": "25000"
+          },
+          {
+            "Conditions for the unit resale": "Not specified"
+          }
+        ]
+      }
+    ],
+    "new_payment_plans": [
+      {
+        "id": 2552,
+        "title": "3 years post handover payment plan",
+        "predicted_completion_at": null,
+        "updated_at": "2025-10-15",
+        "info": {
+          "on_booking_percent": null,
+          "on_booking_fix": null,
+          "on_booking_fix_m2": null,
+          "on_booking_payments_count": null,
+          "on_construction_percent": null,
+          "on_construction_fix": null,
+          "on_construction_fix_m2": null,
+          "on_construction_payments_count": null,
+          "on_handover_percent": null,
+          "on_handover_fix": null,
+          "on_handover_fix_m2": null,
+          "on_handover_payments_count": null,
+          "post_handover_percent": null,
+          "post_handover_fix": null,
+          "post_handover_fix_m2": null,
+          "on_post_handover_payments_count": null,
+          "period_after_handover": null
+        },
+        "fees": [
+          {
+            "type": "first_payment_percent",
+            "amount": null,
+            "percent": null
+          },
+          {
+            "type": "duration_months",
+            "amount": null,
+            "percent": null
+          },
+          {
+            "type": "months_after_handover",
+            "amount": null,
+            "percent": null
+          },
+          {
+            "type": "NOC",
+            "amount": null,
+            "percent": null
+          },
+          {
+            "type": "EOI",
+            "amount": "25000.00 AED",
+            "percent": null
+          }
+        ],
+        "milestones": [
+          {
+            "milestone": "During Construction",
+            "percentage": "70%",
+            "date": null,
+            "items": [
+              {
+                "value": "70%",
+                "title": "During Construction",
+                "date": null,
+                "is_fee": false
+              }
+            ]
+          },
+          {
+            "milestone": "Within 36 Months Ph",
+            "percentage": "30%",
+            "date": null,
+            "items": [
+              {
+                "value": "30%",
+                "title": "Within 36 Months Ph",
+                "date": null,
+                "is_fee": false
+              }
+            ]
+          }
+        ],
+        "heading_percentages": {
+          "During construction": "70%",
+          "Within 36 months PH": "30%"
+        },
+        "timeline_quarter": null,
+        "milestone_quarters": [],
+        "conditions": {
+          "EOI": "25000"
+        }
+      }
+    ],
+    "inventory_json": null,
+    "broker_info_json": null,
+    "inventory_status": false,
+    "offer_link": "https://my.remapp.ae/offer/amra-residences/6329477895",
+    "no_real_inventory": false,
+    "resale_units": [],
+    "project_location": "Umm al-Quwain, Umm Al Quwain",
+    "project_city": "Umm Al Quwain",
+    "nearby_locations": [
+      {
+        "id": 30764,
+        "name": "Mini Maldives",
+        "area": null,
+        "distance": "0.6 KM"
+      },
+      {
+        "id": 30765,
+        "name": "Umm Al Qura School",
+        "area": null,
+        "distance": "1.3 KM"
+      },
+      {
+        "id": 30766,
+        "name": "Al Khor Waterfront - UAQ Waterfront Creek",
+        "area": null,
+        "distance": "1.5 KM"
+      },
+      {
+        "id": 30767,
+        "name": "Mall of UAQ",
+        "area": null,
+        "distance": "7.6 KM"
+      },
+      {
+        "id": 30768,
+        "name": "Sharjah International Airport",
+        "area": null,
+        "distance": "47.7 KM"
+      }
+    ],
+    "off_plan_link": "https://my.remapp.ae",
+    "public": true
+  }
+}

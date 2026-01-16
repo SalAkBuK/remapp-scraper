@@ -1,0 +1,417 @@
+{
+  "og_path": "remapp_scraper\\dist\\og_project_2604.json",
+  "cache_path": "cached_in.json",
+  "diff_count": 70,
+  "diffs": [
+    {
+      "path": "all_images[0]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/feature_image/HiLBViUklEUQ4A7ZrnVXw8OLmWVb18hkI7bsXeZg.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/featuredImage.jpg"
+    },
+    {
+      "path": "all_images[3]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/dyHuIrjh5mltclIqIyMAclcqX7vFW3P1tGbbqpyg.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/projectMasterplan.jpg"
+    },
+    {
+      "path": "all_images[4]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/HYqGnBSlPaWrYZF5AMVA1MuTQRi8hDSz36hGSDHE.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_0.jpg"
+    },
+    {
+      "path": "all_images[5]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/7Fq47GP3IYZ7Hnbvoryqd003bTt1G560XlKVQgiT.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_1.jpg"
+    },
+    {
+      "path": "all_images[6]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/EtI4O6P1Fpa980VpuXA1pFCbRFaDOEAjN6IZAeMF.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_2.png"
+    },
+    {
+      "path": "all_images[7]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/nja4MIQgrbPYfk3DRGmz2BdvLPHcNEleLb4PzMd3.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_0.jpg"
+    },
+    {
+      "path": "all_images[8]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/SfjeX8H5eWfts5TmPmlkzggUiaDQyzbJzi9WBorl.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_1.jpg"
+    },
+    {
+      "path": "all_images[9]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/zObHbGROoThKH01pU4sjmxCU558w0tKBqRCq8AiU.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_2.jpg"
+    },
+    {
+      "path": "all_images[10]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/general_plan_images/2ePifVvIskZGc0Z4jQMI56nX334jVUwdVdo78XB3.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_3.jpg"
+    },
+    {
+      "path": "all_images[11]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_0.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_4.jpg"
+    },
+    {
+      "path": "all_images[12]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_1.jpg"
+    },
+    {
+      "path": "all_images[13]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/amra-residences/architectureImage_2.png"
+    },
+    {
+      "path": "all_images[14]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project/a3ebyemQU7jcGpvRKv67QHu1BPFZhJdKsFwYTJPt.jpg"
+    },
+    {
+      "path": "all_images[15]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project/CNP3zEdaORSq8AfBx8gKI2krWKHUkAKVXxlDGnq5.jpg"
+    },
+    {
+      "path": "all_images[16]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/exterior_images/RaGESwKhHlLXh5RkgdzhCKbysCERVWimo853XBgv.jpg"
+    },
+    {
+      "path": "all_images[17]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/exterior_images/SBBcvXtv3DQEg2fwgsd4zL8C7Ej1Klsg0ZNltdnq.jpg"
+    },
+    {
+      "path": "area_end",
+      "type": "value_mismatch",
+      "og": "2937",
+      "cache": "0"
+    },
+    {
+      "path": "area_start",
+      "type": "value_mismatch",
+      "og": "500",
+      "cache": "0"
+    },
+    {
+      "path": "attachments[0]",
+      "type": "only_in_og",
+      "og": {
+        "attachment_title": "Brochure",
+        "attachment_url": "https://my.remapp.ae/attachment/download/pl782q",
+        "file_type": "pdf"
+      }
+    },
+    {
+      "path": "attachments[1]",
+      "type": "only_in_og",
+      "og": {
+        "attachment_title": "Floor Plan",
+        "attachment_url": "https://my.remapp.ae/attachment/download/pl782r",
+        "file_type": "pdf"
+      }
+    },
+    {
+      "path": "description",
+      "type": "value_mismatch",
+      "og": "<strong>Project General Facts</strong><br><strong>Amra Residences</strong> sets a new standard for wellness-inspired living, seamlessly combining hospitality and holistic design in three elegant sea-facing towers in<strong>&nbsp;Umm Al Quwain</strong>. The project was developed with a focus on balance and longevity, reflecting an architectural philosophy centered on tranquility, sustainability, and a connection to nature. Each building blends harmoniously with the surrounding lagoon and mangroves, creating an environment where serenity and sophistication coexist.<br><br>Residents are welcomed into a refined sanctuary designed around the principles of integrative wellness. Each apartment comes fully furnished and serviced, featuring spacious balconies, biophilic interiors, and a calming palette of natural materials. The thoughtful design promotes well-being while providing flexibility for both permanent residents and those seeking a reprieve from the fast pace of modern life. With interiors curated by renowned design studios such as 1508 London, TRUSH Design, and Design Nomad, Amra showcases a global collaboration of craftsmanship and innovation.<br><br>The project's amenities redefine resort-style living, offering over 100 facilities dedicated to wellness, leisure, and social connection. Residents can indulge in infinity pools with views of the lagoon, a cutting-edge gym, yoga and pilates studios, spa areas, organic dining options, and private beach clubs. In addition to physical wellness, Amra nurtures emotional and intellectual harmony through art galleries, co-working spaces, and areas for meditation and community gatherings \u2014 creating a holistic ecosystem for the body, mind, and spirit.<br><br><strong>Finishing and Materials</strong><br>Modern finishes using high-quality materials.<br><br><strong>Kitchen and Appliances</strong><br>Fully equipped kitchens.<br><br><strong>Furnishing</strong><br>Fully furnished.<br><br><strong>Location Description and Benefits</strong><br>Umm Al Quwain, one of the UAE's most serene emirates, offers a unique blend of tranquility and opportunity. Away from the hustle and bustle of city life, it provides a peaceful coastal lifestyle with pristine beaches, crystal-clear waters, and lush mangroves that form a natural retreat. The emirate\u2019s appeal lies in its simplicity and authenticity, offering residents a slower pace of life without compromising on modern comforts.<br><br>Beyond its natural splendor, Umm Al Quwain is quickly becoming a center for sustainable and wellness-focused living. The emirate\u2019s leadership is investing in eco-friendly developments, cultural preservation, and infrastructure that promotes well-being and community engagement. Its proximity \u2014 just a short drive from Dubai and Sharjah \u2014 allows residents to enjoy both the peace of nature and easy access to the UAE's major business and leisure destinations.<br><br>For those seeking harmony, Umm Al Quwain offers a rare blend of heritage and modernity. With its expanding hospitality sector, marinas, and family-friendly attractions, it is becoming a destination for those who prioritize mindfulness, security, and a strong sense of belonging. Living here means embracing a lifestyle characterized by peace, space, and the timeless beauty of the Arabian Gulf.",
+      "cache": "<strong>Project General Facts</strong><br>Amra Residences sets a new standard for wellness-inspired living, seamlessly combining hospitality and holistic design in three elegant sea-facing towers in Umm Al Quwain. The project was developed with a focus on balance and longevity, reflecting an architectural philosophy centered on tranquility, sustainability, and a connection to nature. Each building blends harmoniously with the surrounding lagoon and mangroves, creating an environment where serenity and sophistication coexist.<br><br>Residents are welcomed into a refined sanctuary designed around the principles of integrative wellness. Each apartment comes fully furnished and serviced, featuring spacious balconies, biophilic interiors, and a calming palette of natural materials. The thoughtful design promotes well-being while providing flexibility for both permanent residents and those seeking a reprieve from the fast pace of modern life. With interiors curated by renowned design studios such as 1508 London, TRUSH Design, and Design Nomad, Amra showcases a global collaboration of craftsmanship and innovation.<br><br>The project's amenities redefine resort-style living, offering over 100 facilities dedicated to wellness, leisure, and social connection. Residents can indulge in infinity pools with views of the lagoon, a cutting-edge gym, yoga and pilates studios, spa areas, organic dining options, and private beach clubs. In addition to physical wellness, Amra nurtures emotional and intellectual harmony through art galleries, co-working spaces, and areas for meditation and community gatherings \u2014 creating a holistic ecosystem for the body, mind, and spirit.<br><br><strong>Finishing and Materials</strong><br>Modern finishes using high-quality materials.<br><br><strong>Kitchen and Appliances</strong><br>Fully equipped kitchens.<br><br><strong>Furnishing</strong><br>Fully furnished.<br><br><strong>Location Description and Benefits</strong><br>Umm Al Quwain, one of the UAE's most serene emirates, offers a unique blend of tranquility and opportunity. Away from the hustle and bustle of city life, it provides a peaceful coastal lifestyle with pristine beaches, crystal-clear waters, and lush mangroves that form a natural retreat. The emirate\u2019s appeal lies in its simplicity and authenticity, offering residents a slower pace of life without compromising on modern comforts.<br><br>Beyond its natural splendor, Umm Al Quwain is quickly becoming a center for sustainable and wellness-focused living. The emirate\u2019s leadership is investing in eco-friendly developments, cultural preservation, and infrastructure that promotes well-being and community engagement. Its proximity \u2014 just a short drive from Dubai and Sharjah \u2014 allows residents to enjoy both the peace of nature and easy access to the UAE's major business and leisure destinations.<br><br>For those seeking harmony, Umm Al Quwain offers a rare blend of heritage and modernity. With its expanding hospitality sector, marinas, and family-friendly attractions, it is becoming a destination for those who prioritize mindfulness, security, and a strong sense of belonging. Living here means embracing a lifestyle characterized by peace, space, and the timeless beauty of the Arabian Gulf."
+    },
+    {
+      "path": "images.exterior[0]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/exterior_images/RaGESwKhHlLXh5RkgdzhCKbysCERVWimo853XBgv.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_0.jpg"
+    },
+    {
+      "path": "images.exterior[1]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/exterior_images/SBBcvXtv3DQEg2fwgsd4zL8C7Ej1Klsg0ZNltdnq.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_1.jpg"
+    },
+    {
+      "path": "images.exterior[2]",
+      "type": "only_in_cache",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_2.jpg"
+    },
+    {
+      "path": "images.exterior[3]",
+      "type": "only_in_cache",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_3.jpg"
+    },
+    {
+      "path": "images.exterior[4]",
+      "type": "only_in_cache",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/lobbyImages_4.jpg"
+    },
+    {
+      "path": "images.feature",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/feature_image/HiLBViUklEUQ4A7ZrnVXw8OLmWVb18hkI7bsXeZg.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/featuredImage.jpg"
+    },
+    {
+      "path": "images.general[0]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/general_plan_images/2ePifVvIskZGc0Z4jQMI56nX334jVUwdVdo78XB3.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/projectMasterplan.jpg"
+    },
+    {
+      "path": "images.interior[2]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/dyHuIrjh5mltclIqIyMAclcqX7vFW3P1tGbbqpyg.jpg"
+    },
+    {
+      "path": "images.interior[3]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/HYqGnBSlPaWrYZF5AMVA1MuTQRi8hDSz36hGSDHE.jpg"
+    },
+    {
+      "path": "images.interior[4]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/7Fq47GP3IYZ7Hnbvoryqd003bTt1G560XlKVQgiT.jpg"
+    },
+    {
+      "path": "images.interior[5]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/EtI4O6P1Fpa980VpuXA1pFCbRFaDOEAjN6IZAeMF.jpg"
+    },
+    {
+      "path": "images.interior[6]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/nja4MIQgrbPYfk3DRGmz2BdvLPHcNEleLb4PzMd3.jpg"
+    },
+    {
+      "path": "images.interior[7]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/SfjeX8H5eWfts5TmPmlkzggUiaDQyzbJzi9WBorl.jpg"
+    },
+    {
+      "path": "images.interior[8]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project_interior_images/zObHbGROoThKH01pU4sjmxCU558w0tKBqRCq8AiU.jpg"
+    },
+    {
+      "path": "images.other[3]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project/a3ebyemQU7jcGpvRKv67QHu1BPFZhJdKsFwYTJPt.jpg"
+    },
+    {
+      "path": "images.other[4]",
+      "type": "only_in_og",
+      "og": "https://files.remapp.ae/rem/projects_content/project/CNP3zEdaORSq8AfBx8gKI2krWKHUkAKVXxlDGnq5.jpg"
+    },
+    {
+      "path": "nearby_locations[0].id",
+      "type": "value_mismatch",
+      "og": 30764,
+      "cache": 25938
+    },
+    {
+      "path": "nearby_locations[1].id",
+      "type": "value_mismatch",
+      "og": 30765,
+      "cache": 25939
+    },
+    {
+      "path": "nearby_locations[2].id",
+      "type": "value_mismatch",
+      "og": 30766,
+      "cache": 25940
+    },
+    {
+      "path": "nearby_locations[3].id",
+      "type": "value_mismatch",
+      "og": 30767,
+      "cache": 25941
+    },
+    {
+      "path": "nearby_locations[4].id",
+      "type": "value_mismatch",
+      "og": 30768,
+      "cache": 25942
+    },
+    {
+      "path": "price_end",
+      "type": "value_mismatch",
+      "og": "4100000.00",
+      "cache": "0"
+    },
+    {
+      "path": "project_status",
+      "type": "value_mismatch",
+      "og": "Pre Sale",
+      "cache": "Announced"
+    },
+    {
+      "path": "typical_units[0].highest_area",
+      "type": "value_mismatch",
+      "og": "500",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[0].highest_price",
+      "type": "value_mismatch",
+      "og": "690000.00",
+      "cache": "0.00"
+    },
+    {
+      "path": "typical_units[0].images[0]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/unit_structure_image/yE4jLDksvFTBaCzswf1MpLLrNcCv6TXmuEzlfVhh.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/units_1.png"
+    },
+    {
+      "path": "typical_units[0].lowest_area",
+      "type": "value_mismatch",
+      "og": "500",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[0].property_types",
+      "type": "value_mismatch",
+      "og": "Apartment",
+      "cache": "Apartments"
+    },
+    {
+      "path": "typical_units[1].highest_area",
+      "type": "value_mismatch",
+      "og": "846",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[1].highest_price",
+      "type": "value_mismatch",
+      "og": "1100000.00",
+      "cache": "0.00"
+    },
+    {
+      "path": "typical_units[1].images[0]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/unit_structure_image/ow4lNOs9DxLeBX1dcEpCnkQhnRK4Opt0WjzHcdLH.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/units_2.png"
+    },
+    {
+      "path": "typical_units[1].lowest_area",
+      "type": "value_mismatch",
+      "og": "846",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[1].property_types",
+      "type": "value_mismatch",
+      "og": "Apartment",
+      "cache": "Apartments"
+    },
+    {
+      "path": "typical_units[2].highest_area",
+      "type": "value_mismatch",
+      "og": "1387",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[2].highest_price",
+      "type": "value_mismatch",
+      "og": "1600000.00",
+      "cache": "0.00"
+    },
+    {
+      "path": "typical_units[2].images[0]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/unit_structure_image/3NtwpYj6KQ5L7MTaWGYikIUwRxM8F6bZUgwXEOGF.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/units_3.png"
+    },
+    {
+      "path": "typical_units[2].lowest_area",
+      "type": "value_mismatch",
+      "og": "1387",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[2].property_types",
+      "type": "value_mismatch",
+      "og": "Apartment",
+      "cache": "Apartments"
+    },
+    {
+      "path": "typical_units[3].highest_area",
+      "type": "value_mismatch",
+      "og": "1915",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[3].highest_price",
+      "type": "value_mismatch",
+      "og": "1850000.00",
+      "cache": "0.00"
+    },
+    {
+      "path": "typical_units[3].images[0]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/unit_structure_image/fUTW1keivseo2JmJJsNwKOzqtYUBeOyuiHegVzDP.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/units_4.png"
+    },
+    {
+      "path": "typical_units[3].lowest_area",
+      "type": "value_mismatch",
+      "og": "1915",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[3].property_types",
+      "type": "value_mismatch",
+      "og": "Apartment",
+      "cache": "Apartments"
+    },
+    {
+      "path": "typical_units[4].highest_area",
+      "type": "value_mismatch",
+      "og": "2937",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[4].highest_price",
+      "type": "value_mismatch",
+      "og": "4100000.00",
+      "cache": "0.00"
+    },
+    {
+      "path": "typical_units[4].images[0]",
+      "type": "value_mismatch",
+      "og": "https://files.remapp.ae/rem/projects_content/unit_structure_image/z2wn26S0L83CJQcCrzVeT6ZAgKZ8zZHfhM7pFuhd.jpg",
+      "cache": "https://files.remapp.ae/rem/projects_content/amra-residences/units_5.png"
+    },
+    {
+      "path": "typical_units[4].lowest_area",
+      "type": "value_mismatch",
+      "og": "2937",
+      "cache": "0"
+    },
+    {
+      "path": "typical_units[4].property_types",
+      "type": "value_mismatch",
+      "og": "Apartment",
+      "cache": "Apartments"
+    },
+    {
+      "path": "website[0]",
+      "type": "only_in_og",
+      "og": {
+        "website_title": "Developer Website",
+        "website_url": "https://citideveloper.com/"
+      }
+    }
+  ]
+}
