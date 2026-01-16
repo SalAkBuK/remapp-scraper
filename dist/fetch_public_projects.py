@@ -225,6 +225,12 @@ def fetch_detail_with_retry(
                 return payload
         except requests.HTTPError as exc:
             status = exc.response.status_code if exc.response is not None else None
+            
+            # Handle 404 Not Found or 422 Unprocessable Entity - Project likely deleted/invalid
+            if status in {404, 422, 400}:
+                print(f"Project not found or invalid (status {status}) for slug={slug}, id={project_id}. Skipping.")
+                return {"error": f"Project not found (status {status})"}
+
             # Handle unauthorized/forbidden by attempting re-login
             if status in {401, 403} and username and password:
                 print(f"Received {status} for detail fetch. Attempting re-login...")
@@ -260,7 +266,7 @@ def main() -> None:
         os.environ.get("REMAPP_REHYDRATE_ONLY", "0").strip().lower() in {"1", "true", "yes"}
     )
     force_detail_refresh = (
-        os.environ.get("REMAPP_FORCE_DETAIL_REFRESH", "1").strip().lower()
+        os.environ.get("REMAPP_FORCE_DETAIL_REFRESH", "0").strip().lower()
         in {"1", "true", "yes"}
     )
     detail_batch_size = int(os.environ.get("REMAPP_DETAIL_BATCH_SIZE", "0") or "0")
@@ -434,8 +440,8 @@ def main() -> None:
                 "Batch mode: processing "
                 f"{detail_batch_offset + 1}..{batch_end} of {total}"
             )
-        details_mode = "w" if force_detail_refresh else "a"
-        error_mode = "w" if force_detail_refresh else "a"
+        details_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
+        error_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
         with DETAILS_JSONL_PATH.open(details_mode, encoding="utf-8") as progress_file:
             error_file = DETAILS_ERROR_PATH.open(error_mode, encoding="utf-8")
             for index, item in enumerate(all_projects, start=1):
