@@ -88,6 +88,24 @@ app.get('/projects', requireApiKey, (req, res) => {
     });
 });
 
+app.get('/refresh/status', (req, res) => {
+    const stateFile = path.join(__dirname, 'dist', 'incremental_state.json');
+    let state = null;
+    try {
+        state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+    } catch (error) {
+        // State file doesn't exist yet
+    }
+
+    res.json({
+        refreshAvailable: !!API_KEY,
+        hasState: !!state,
+        lastRefresh: state ? state.last_fetch_timestamp : null,
+        totalProjects: state ? state.total_projects : null,
+        message: API_KEY ? 'Refresh endpoint is available' : 'API_KEY not configured'
+    });
+});
+
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', time: new Date().toISOString() });
 });
