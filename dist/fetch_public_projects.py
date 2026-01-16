@@ -222,6 +222,8 @@ def main() -> None:
         os.environ.get("REMAPP_FORCE_DETAIL_REFRESH", "1").strip().lower()
         in {"1", "true", "yes"}
     )
+    detail_batch_size = int(os.environ.get("REMAPP_DETAIL_BATCH_SIZE", "0") or "0")
+    detail_batch_offset = int(os.environ.get("REMAPP_DETAIL_BATCH_OFFSET", "0") or "0")
     token = os.environ.get("REMAPP_BEARER_TOKEN")
     username = os.environ.get("REMAPP_USERNAME") or os.environ.get("REMAPP_EMAIL")
     password = os.environ.get("REMAPP_PASSWORD")
@@ -370,11 +372,22 @@ def main() -> None:
         total = len(all_projects)
         skipped = 0
         missing_details = 0
+        batch_end = total
+        if detail_batch_size > 0:
+            detail_batch_offset = max(detail_batch_offset, 0)
+            batch_end = min(detail_batch_offset + detail_batch_size, total)
+            print(
+                "Batch mode: processing "
+                f"{detail_batch_offset + 1}..{batch_end} of {total}"
+            )
         details_mode = "w" if force_detail_refresh else "a"
         error_mode = "w" if force_detail_refresh else "a"
         with DETAILS_JSONL_PATH.open(details_mode, encoding="utf-8") as progress_file:
             error_file = DETAILS_ERROR_PATH.open(error_mode, encoding="utf-8")
             for index, item in enumerate(all_projects, start=1):
+                if detail_batch_size > 0:
+                    if index <= detail_batch_offset or index > batch_end:
+                        continue
                 slug = item.get("slug") if isinstance(item, dict) else None
                 project_id = item.get("id") if isinstance(item, dict) else None
 
