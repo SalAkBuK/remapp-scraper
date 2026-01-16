@@ -211,24 +211,47 @@ def is_project_in_list(project_id: int, existing_projects: List[Dict[str, Any]])
 
 
 def fetch_detail_with_retry(
-    slug: Optional[str], project_id: Optional[int], token: Optional[str]
+    slug: Optional[str],
+    project_id: Optional[int],
+    token: Optional[str],
+    username: Optional[str] = None,
+    password: Optional[str] = None,
 ) -> Dict[str, Any]:
+    current_token = token
     for attempt in range(MAX_RETRIES):
         try:
-            payload, status = fetch_detail(slug, project_id, token)
+            payload, status = fetch_detail(slug, project_id, current_token)
             if status != 429:
                 return payload
         except requests.HTTPError as exc:
             status = exc.response.status_code if exc.response is not None else None
+            # Handle unauthorized/forbidden by attempting re-login
+            if status in {401, 403} and username and password:
+                print(f"Received {status} for detail fetch. Attempting re-login...")
+                try:
+                    new_token = login(username, password)
+                    save_env_value(ENV_PATH, "REMAPP_BEARER_TOKEN", new_token)
+                    os.environ["REMAPP_BEARER_TOKEN"] = new_token
+                    current_token = new_token
+                    # Retry immediately with new token
+                    payload, status = fetch_detail(slug, project_id, current_token)
+                    if status != 429:
+                        return payload
+                except Exception as login_exc:
+                    print(f"Re-login failed during retry: {login_exc}")
+                    # Continue to logic below to handle 429 or raise original error
+            
             if status == 429:
                 pass
-            else:
-                raise
+            elif status in {401, 403} and (not username or not password):
+                raise  # No credentials to refresh with
+            elif status not in {401, 403}:
+                 raise # Re-raise other errors
 
         sleep_for = RETRY_BACKOFF_SECONDS * (2**attempt)
         time.sleep(sleep_for)
 
-    raise RuntimeError("Exceeded retries due to rate limiting (429).")
+    raise RuntimeError("Exceeded retries due to rate limiting (429) or auth failures.")
 
 
 def main() -> None:
@@ -339,15 +362,17 @@ def main() -> None:
             except requests.HTTPError as exc:
                 status = exc.response.status_code if exc.response is not None else None
                 if status in {401, 403}:
-                    if not token and username and password:
+                    # Token might be expired, try to refresh
+                    if username and password:
+                        print(f"Received {status} fetching list page {page}. Attempting re-login...")
                         token = login(username, password)
                         save_env_value(ENV_PATH, "REMAPP_BEARER_TOKEN", token)
                         os.environ["REMAPP_BEARER_TOKEN"] = token
-                    if not token:
+                        payload = fetch_page(page, token)
+                    else:
                         raise SystemExit(
                             "API requires auth. Set REMAPP_BEARER_TOKEN or login creds in remapp_scraper/.env"
                         ) from exc
-                    payload = fetch_page(page, token)
                 else:
                     raise
             page_projects = extract_projects(payload)
@@ -435,21 +460,11 @@ def main() -> None:
                         continue
 
                 try:
-                    detail_payload = fetch_detail_with_retry(slug, project_id, token)
+                    detail_payload = fetch_detail_with_retry(slug, project_id, token, username, password)
                 except requests.HTTPError as exc:
-                    status = exc.response.status_code if exc.response is not None else None
-                    if status in {401, 403}:
-                        if username and password:
-                            token = login(username, password)
-                            save_env_value(ENV_PATH, "REMAPP_BEARER_TOKEN", token)
-                            os.environ["REMAPP_BEARER_TOKEN"] = token
-                            detail_payload = fetch_detail_with_retry(slug, project_id, token)
-                        else:
-                            raise SystemExit(
-                                "Detail API requires auth. Set REMAPP_BEARER_TOKEN or login creds in remapp_scraper/.env"
-                            ) from exc
-                    else:
-                        raise
+                    # fetch_detail_with_retry handles 401/403 retry looping internally if creds are provided
+                    # If it raises HTTPError here, it means it couldn't recover
+                    raise
 
                 detail_data = (
                     detail_payload.get("data") if isinstance(detail_payload, dict) else None
