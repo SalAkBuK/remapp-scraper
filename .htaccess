@@ -1,0 +1,27 @@
+# Remapp Scraper API - Apache/LiteSpeed Configuration
+
+# Disable ModSecurity for this application
+# This allows POST requests to /refresh endpoint
+<IfModule mod_security.c>
+  SecRuleEngine Off
+</IfModule>
+
+# Enable CORS if needed (optional - uncomment if you need cross-origin requests)
+# <IfModule mod_headers.c>
+#   Header set Access-Control-Allow-Origin "*"
+#   Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+#   Header set Access-Control-Allow-Headers "Authorization, Content-Type"
+# </IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^\.env">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Node.js app handling (if using Passenger or similar)
+# PassengerEnabled on
+# PassengerAppRoot /path/to/your/app
