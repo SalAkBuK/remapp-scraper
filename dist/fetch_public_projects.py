@@ -21,6 +21,7 @@ LOG_EVERY = 50
 LIST_CACHE_PATH = OUTPUT_DIR / "projects_from_api.json"
 DETAILS_ERROR_PATH = OUTPUT_DIR / "projects_details_errors.jsonl"
 INCREMENTAL_STATE_PATH = OUTPUT_DIR / "incremental_state.json"
+DETAIL_BATCH_STATE_PATH = OUTPUT_DIR / "detail_batch_state.json"
 
 
 def load_env_file(path: Path) -> None:
@@ -163,6 +164,23 @@ def load_incremental_state() -> Optional[Dict[str, Any]]:
         return None
 
 
+def load_batch_state() -> Dict[str, Any]:
+    """Load the detail batch rotation state."""
+    if not DETAIL_BATCH_STATE_PATH.is_file():
+        return {}
+    try:
+        return json.loads(DETAIL_BATCH_STATE_PATH.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def save_batch_state(state: Dict[str, Any]) -> None:
+    """Persist the detail batch rotation state."""
+    DETAIL_BATCH_STATE_PATH.write_text(
+        json.dumps(state, ensure_ascii=True, indent=2), encoding="utf-8"
+    )
+
+
 def save_incremental_state(projects: List[Dict[str, Any]]) -> None:
     """Save the current fetch state for incremental updates."""
     if not projects:
@@ -224,6 +242,10 @@ def main() -> None:
     )
     detail_batch_size = int(os.environ.get("REMAPP_DETAIL_BATCH_SIZE", "0") or "0")
     detail_batch_offset = int(os.environ.get("REMAPP_DETAIL_BATCH_OFFSET", "0") or "0")
+    detail_batch_auto = (
+        os.environ.get("REMAPP_DETAIL_BATCH_AUTO", "1").strip().lower()
+        in {"1", "true", "yes"}
+    )
     token = os.environ.get("REMAPP_BEARER_TOKEN")
     username = os.environ.get("REMAPP_USERNAME") or os.environ.get("REMAPP_EMAIL")
     password = os.environ.get("REMAPP_PASSWORD")
@@ -374,7 +396,14 @@ def main() -> None:
         missing_details = 0
         batch_end = total
         if detail_batch_size > 0:
+            if detail_batch_auto:
+                batch_state = load_batch_state()
+                state_offset = batch_state.get("next_offset")
+                if isinstance(state_offset, int):
+                    detail_batch_offset = state_offset
             detail_batch_offset = max(detail_batch_offset, 0)
+            if detail_batch_offset >= total and total > 0:
+                detail_batch_offset = 0
             batch_end = min(detail_batch_offset + detail_batch_size, total)
             print(
                 "Batch mode: processing "
@@ -460,6 +489,18 @@ def main() -> None:
 
                 time.sleep(DETAIL_SLEEP_SECONDS)
             error_file.close()
+        if detail_batch_size > 0 and detail_batch_auto and total > 0:
+            next_offset = batch_end
+            if next_offset >= total:
+                next_offset = 0
+            save_batch_state(
+                {
+                    "next_offset": next_offset,
+                    "last_total": total,
+                    "last_run": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                    "batch_size": detail_batch_size,
+                }
+            )
 
     details_output_path = OUTPUT_DIR / "projects_details.json"
     details_output_path.write_text(json.dumps(details, ensure_ascii=True, indent=2))
