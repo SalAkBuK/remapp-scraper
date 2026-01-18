@@ -458,11 +458,15 @@ def main() -> None:
                     continue
 
                 if not force_detail_refresh:
-                    if (isinstance(project_id, int) and project_id in seen_ids) or (
-                        isinstance(slug, str) and slug in seen_slugs
-                    ):
+                    # Check by ID first (most reliable)
+                    if isinstance(project_id, int) and project_id in seen_ids:
                         if index % LOG_EVERY == 0:
-                            print(f"Progress: {index}/{total} (cached)")
+                            print(f"Progress: {index}/{total} (cached by ID)")
+                        continue
+                    # Fallback to slug only if ID is missing
+                    if project_id is None and isinstance(slug, str) and slug in seen_slugs:
+                        if index % LOG_EVERY == 0:
+                            print(f"Progress: {index}/{total} (cached by slug)")
                         continue
 
                 try:
