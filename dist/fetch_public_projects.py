@@ -275,6 +275,10 @@ def main() -> None:
         os.environ.get("REMAPP_DETAIL_BATCH_AUTO", "1").strip().lower()
         in {"1", "true", "yes"}
     )
+    batch_until_complete = (
+        os.environ.get("REMAPP_BATCH_UNTIL_COMPLETE", "0").strip().lower()
+        in {"1", "true", "yes"}
+    )
     token = os.environ.get("REMAPP_BEARER_TOKEN")
     username = os.environ.get("REMAPP_USERNAME") or os.environ.get("REMAPP_EMAIL")
     password = os.environ.get("REMAPP_PASSWORD")
@@ -423,109 +427,119 @@ def main() -> None:
         print("Rehydrate-only mode: skipping API calls.")
     else:
         total = len(all_projects)
-        skipped = 0
-        missing_details = 0
-        batch_end = total
-        if detail_batch_size > 0:
-            if detail_batch_auto:
-                batch_state = load_batch_state()
-                state_offset = batch_state.get("next_offset")
-                if isinstance(state_offset, int):
-                    detail_batch_offset = state_offset
-            detail_batch_offset = max(detail_batch_offset, 0)
-            if detail_batch_offset >= total and total > 0:
-                detail_batch_offset = 0
-            batch_end = min(detail_batch_offset + detail_batch_size, total)
-            print(
-                "Batch mode: processing "
-                f"{detail_batch_offset + 1}..{batch_end} of {total}"
-            )
-        details_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
-        error_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
-        with DETAILS_JSONL_PATH.open(details_mode, encoding="utf-8") as progress_file:
-            error_file = DETAILS_ERROR_PATH.open(error_mode, encoding="utf-8")
-            for index, item in enumerate(all_projects, start=1):
-                if detail_batch_size > 0:
-                    if index <= detail_batch_offset or index > batch_end:
-                        continue
-                slug = item.get("slug") if isinstance(item, dict) else None
-                project_id = item.get("id") if isinstance(item, dict) else None
-
-                if not slug and project_id is None:
-                    skipped += 1
-                    if index % LOG_EVERY == 0:
-                        print(f"Progress: {index}/{total} (skipped {skipped})")
-                    continue
-
-                if not force_detail_refresh:
-                    # Check by ID first (most reliable)
-                    if isinstance(project_id, int) and project_id in seen_ids:
-                        if index % LOG_EVERY == 0:
-                            print(f"Progress: {index}/{total} (cached by ID)")
-                        continue
-                    # Fallback to slug only if ID is missing
-                    if project_id is None and isinstance(slug, str) and slug in seen_slugs:
-                        if index % LOG_EVERY == 0:
-                            print(f"Progress: {index}/{total} (cached by slug)")
-                        continue
-
-                try:
-                    detail_payload = fetch_detail_with_retry(slug, project_id, token, username, password)
-                except requests.HTTPError as exc:
-                    # fetch_detail_with_retry handles 401/403 retry looping internally if creds are provided
-                    # If it raises HTTPError here, it means it couldn't recover
-                    raise
-
-                detail_data = (
-                    detail_payload.get("data") if isinstance(detail_payload, dict) else None
+        while True:
+            skipped = 0
+            missing_details = 0
+            batch_end = total
+            if detail_batch_size > 0:
+                if detail_batch_auto:
+                    batch_state = load_batch_state()
+                    state_offset = batch_state.get("next_offset")
+                    if isinstance(state_offset, int):
+                        detail_batch_offset = state_offset
+                detail_batch_offset = max(detail_batch_offset, 0)
+                if detail_batch_offset >= total and total > 0:
+                    detail_batch_offset = 0
+                batch_end = min(detail_batch_offset + detail_batch_size, total)
+                print(
+                    "Batch mode: processing "
+                    f"{detail_batch_offset + 1}..{batch_end} of {total}"
                 )
-                if isinstance(detail_data, dict):
-                    if isinstance(project_id, int):
-                        detail_data = dict(detail_data)
-                        detail_data["fk_project_id"] = project_id
-                    details.append(detail_data)
-                    progress_file.write(json.dumps(detail_data, ensure_ascii=True) + "\n")
-                    progress_file.flush()
-                    detail_id = detail_data.get("fk_project_id") or detail_data.get("id")
-                    detail_slug = detail_data.get("slug")
-                    if isinstance(detail_id, int):
-                        seen_ids.add(detail_id)
-                    if isinstance(detail_slug, str):
-                        seen_slugs.add(detail_slug)
-                else:
-                    missing_details += 1
-                    error_file.write(
-                        json.dumps(
-                            {
-                                "id": project_id,
-                                "slug": slug,
-                                "response": detail_payload,
-                            },
-                            ensure_ascii=True,
+            details_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
+            error_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
+            with DETAILS_JSONL_PATH.open(details_mode, encoding="utf-8") as progress_file:
+                error_file = DETAILS_ERROR_PATH.open(error_mode, encoding="utf-8")
+                for index, item in enumerate(all_projects, start=1):
+                    if detail_batch_size > 0:
+                        if index <= detail_batch_offset or index > batch_end:
+                            continue
+                    slug = item.get("slug") if isinstance(item, dict) else None
+                    project_id = item.get("id") if isinstance(item, dict) else None
+
+                    if not slug and project_id is None:
+                        skipped += 1
+                        if index % LOG_EVERY == 0:
+                            print(f"Progress: {index}/{total} (skipped {skipped})")
+                        continue
+
+                    if not force_detail_refresh:
+                        # Check by ID first (most reliable)
+                        if isinstance(project_id, int) and project_id in seen_ids:
+                            if index % LOG_EVERY == 0:
+                                print(f"Progress: {index}/{total} (cached by ID)")
+                            continue
+                        # Fallback to slug only if ID is missing
+                        if project_id is None and isinstance(slug, str) and slug in seen_slugs:
+                            if index % LOG_EVERY == 0:
+                                print(f"Progress: {index}/{total} (cached by slug)")
+                            continue
+
+                    try:
+                        detail_payload = fetch_detail_with_retry(slug, project_id, token, username, password)
+                    except requests.HTTPError as exc:
+                        # fetch_detail_with_retry handles 401/403 retry looping internally if creds are provided
+                        # If it raises HTTPError here, it means it couldn't recover
+                        raise
+
+                    detail_data = (
+                        detail_payload.get("data") if isinstance(detail_payload, dict) else None
+                    )
+                    if isinstance(detail_data, dict):
+                        if isinstance(project_id, int):
+                            detail_data = dict(detail_data)
+                            detail_data["fk_project_id"] = project_id
+                        details.append(detail_data)
+                        progress_file.write(json.dumps(detail_data, ensure_ascii=True) + "\n")
+                        progress_file.flush()
+                        detail_id = detail_data.get("fk_project_id") or detail_data.get("id")
+                        detail_slug = detail_data.get("slug")
+                        if isinstance(detail_id, int):
+                            seen_ids.add(detail_id)
+                        if isinstance(detail_slug, str):
+                            seen_slugs.add(detail_slug)
+                    else:
+                        missing_details += 1
+                        error_file.write(
+                            json.dumps(
+                                {
+                                    "id": project_id,
+                                    "slug": slug,
+                                    "response": detail_payload,
+                                },
+                                ensure_ascii=True,
+                            )
+                            + "\n"
                         )
-                        + "\n"
-                    )
-                    error_file.flush()
+                        error_file.flush()
 
-                if index % LOG_EVERY == 0:
-                    print(
-                        f"Progress: {index}/{total} (skipped {skipped}, missing {missing_details})"
-                    )
+                    if index % LOG_EVERY == 0:
+                        print(
+                            f"Progress: {index}/{total} (skipped {skipped}, missing {missing_details})"
+                        )
 
-                time.sleep(DETAIL_SLEEP_SECONDS)
-            error_file.close()
-        if detail_batch_size > 0 and detail_batch_auto and total > 0:
-            next_offset = batch_end
-            if next_offset >= total:
-                next_offset = 0
-            save_batch_state(
-                {
-                    "next_offset": next_offset,
-                    "last_total": total,
-                    "last_run": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
-                    "batch_size": detail_batch_size,
-                }
-            )
+                    time.sleep(DETAIL_SLEEP_SECONDS)
+                error_file.close()
+
+            next_offset = 0
+            if detail_batch_size > 0 and detail_batch_auto and total > 0:
+                next_offset = batch_end
+                if next_offset >= total:
+                    next_offset = 0
+                save_batch_state(
+                    {
+                        "next_offset": next_offset,
+                        "last_total": total,
+                        "last_run": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
+                        "batch_size": detail_batch_size,
+                    }
+                )
+            
+            # Check if we should continue for the next cycle
+            if batch_until_complete and next_offset != 0:
+                print(f"Full Cycle Mode: Continuing to next batch (offset {next_offset})")
+                continue
+            else:
+                break
 
     details_output_path = OUTPUT_DIR / "projects_details.json"
     details_output_path.write_text(json.dumps(details, ensure_ascii=True, indent=2))
