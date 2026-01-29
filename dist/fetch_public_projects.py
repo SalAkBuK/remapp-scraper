@@ -399,13 +399,14 @@ def main() -> None:
         LIST_CACHE_PATH.write_text(json.dumps(all_projects, ensure_ascii=True, indent=2))
         print(f"Saved {len(all_projects)} list items to {LIST_CACHE_PATH}")
 
-    details: List[Dict[str, Any]] = []
+    # For memory efficiency: only track IDs, don't load full objects into RAM yet
     seen_ids: set[int] = set()
     seen_slugs: set[str] = set()
     
-    # Always load existing details if available (for crash recovery or appending)
-    if DETAILS_JSONL_PATH.is_file():
+    # Scan the JSONL file to build the "seen" sets without loading full objects
+    if DETAILS_JSONL_PATH.is_file() and not force_detail_refresh:
         try:
+            detail_count = 0
             for raw_line in DETAILS_JSONL_PATH.read_text(encoding="utf-8").splitlines():
                 raw_line = raw_line.strip()
                 if not raw_line:
@@ -415,21 +416,17 @@ def main() -> None:
                 except json.JSONDecodeError:
                     continue
                 if isinstance(detail, dict):
-                    details.append(detail)
-                    # Only mark as "seen" (to skip fetching) if we are NOT forcing a refresh.
-                    # If force_detail_refresh is True, we want to re-fetch even if we have it.
-                    if not force_detail_refresh:
-                        detail_id = detail.get("fk_project_id") or detail.get("id")
-                        detail_slug = detail.get("slug")
-                        if isinstance(detail_id, int):
-                            seen_ids.add(detail_id)
-                        if isinstance(detail_slug, str):
-                            seen_slugs.add(detail_slug)
+                    detail_count += 1
+                    detail_id = detail.get("fk_project_id") or detail.get("id")
+                    detail_slug = detail.get("slug")
+                    if isinstance(detail_id, int):
+                        seen_ids.add(detail_id)
+                    if isinstance(detail_slug, str):
+                        seen_slugs.add(detail_slug)
+            if detail_count > 0:
+                print(f"Loaded {detail_count} existing IDs from {DETAILS_JSONL_PATH} (memory-efficient mode)")
         except OSError:
             pass # File read error, perform fresh start
-            
-    if details:
-        print(f"Resuming with {len(details)} cached details from {DETAILS_JSONL_PATH}")
 
     if rehydrate_only:
         print("Rehydrate-only mode: skipping API calls.")
@@ -496,7 +493,7 @@ def main() -> None:
                         if isinstance(project_id, int):
                             detail_data = dict(detail_data)
                             detail_data["fk_project_id"] = project_id
-                        details.append(detail_data)
+                        # Write to disk immediately, don't accumulate in memory
                         progress_file.write(json.dumps(detail_data, ensure_ascii=True) + "\n")
                         progress_file.flush()
                         detail_id = detail_data.get("fk_project_id") or detail_data.get("id")
@@ -549,6 +546,25 @@ def main() -> None:
             else:
                 break
 
+    # Now that batch processing is complete, load all details from disk for final merge
+    details: List[Dict[str, Any]] = []
+    if DETAILS_JSONL_PATH.is_file():
+        try:
+            for raw_line in DETAILS_JSONL_PATH.read_text(encoding="utf-8").splitlines():
+                raw_line = raw_line.strip()
+                if not raw_line:
+                    continue
+                try:
+                    detail = json.loads(raw_line)
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(detail, dict):
+                    details.append(detail)
+        except OSError:
+            details = []
+    
+    print(f"Loaded {len(details)} total details from disk for final merge")
+    
     details_output_path = OUTPUT_DIR / "projects_details.json"
     details_output_path.write_text(json.dumps(details, ensure_ascii=True, indent=2))
     print(f"Saved {len(details)} project details to {details_output_path}")
