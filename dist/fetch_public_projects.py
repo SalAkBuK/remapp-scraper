@@ -402,24 +402,32 @@ def main() -> None:
     details: List[Dict[str, Any]] = []
     seen_ids: set[int] = set()
     seen_slugs: set[str] = set()
-    if DETAILS_JSONL_PATH.is_file() and not force_detail_refresh:
-        for raw_line in DETAILS_JSONL_PATH.read_text(encoding="utf-8").splitlines():
-            raw_line = raw_line.strip()
-            if not raw_line:
-                continue
-            try:
-                detail = json.loads(raw_line)
-            except json.JSONDecodeError:
-                continue
-            if isinstance(detail, dict):
-                detail_id = detail.get("fk_project_id") or detail.get("id")
-                detail_slug = detail.get("slug")
-                if isinstance(detail_id, int):
-                    seen_ids.add(detail_id)
-                if isinstance(detail_slug, str):
-                    seen_slugs.add(detail_slug)
-                details.append(detail)
-
+    
+    # Always load existing details if available (for crash recovery or appending)
+    if DETAILS_JSONL_PATH.is_file():
+        try:
+            for raw_line in DETAILS_JSONL_PATH.read_text(encoding="utf-8").splitlines():
+                raw_line = raw_line.strip()
+                if not raw_line:
+                    continue
+                try:
+                    detail = json.loads(raw_line)
+                except json.JSONDecodeError:
+                    continue
+                if isinstance(detail, dict):
+                    details.append(detail)
+                    # Only mark as "seen" (to skip fetching) if we are NOT forcing a refresh.
+                    # If force_detail_refresh is True, we want to re-fetch even if we have it.
+                    if not force_detail_refresh:
+                        detail_id = detail.get("fk_project_id") or detail.get("id")
+                        detail_slug = detail.get("slug")
+                        if isinstance(detail_id, int):
+                            seen_ids.add(detail_id)
+                        if isinstance(detail_slug, str):
+                            seen_slugs.add(detail_slug)
+        except OSError:
+            pass # File read error, perform fresh start
+            
     if details:
         print(f"Resuming with {len(details)} cached details from {DETAILS_JSONL_PATH}")
 
