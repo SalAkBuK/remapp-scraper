@@ -452,12 +452,17 @@ def main() -> None:
                 )
             details_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
             error_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
-            with DETAILS_JSONL_PATH.open(details_mode, encoding="utf-8") as progress_file:
-                error_file = DETAILS_ERROR_PATH.open(error_mode, encoding="utf-8")
-                for index, item in enumerate(all_projects, start=1):
-                    if detail_batch_size > 0:
-                        if index <= detail_batch_offset or index > batch_end:
-                            continue
+            
+            # Only iterate through the batch slice, not all projects
+            batch_projects = all_projects[detail_batch_offset:batch_end] if detail_batch_size > 0 else all_projects
+            
+            with DETAILS_JSONL_PATH.open(details_mode, encoding="utf-8") as progress_file, \
+                 DETAILS_ERROR_PATH.open(error_mode, encoding="utf-8") as error_file:
+                
+                for batch_index, item in enumerate(batch_projects):
+                    # Calculate the actual index in the full list for logging
+                    index = detail_batch_offset + batch_index + 1
+                    
                     slug = item.get("slug") if isinstance(item, dict) else None
                     project_id = item.get("id") if isinstance(item, dict) else None
 
@@ -523,7 +528,6 @@ def main() -> None:
                         )
 
                     time.sleep(DETAIL_SLEEP_SECONDS)
-                error_file.close()
 
             next_offset = 0
             if detail_batch_size > 0 and detail_batch_auto and total > 0:
