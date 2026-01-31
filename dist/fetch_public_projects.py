@@ -17,7 +17,7 @@ ENV_PATH = ROOT_DIR / ".env"
 DETAIL_SLEEP_SECONDS = 0.5
 MAX_RETRIES = 5
 RETRY_BACKOFF_SECONDS = 5
-DETAILS_JSONL_PATH = OUTPUT_DIR / "projects_details.jsonl"
+DETAILS_JSONL_PATH = OUTPUT_DIR / "projects_details.jsonl" 
 LOG_EVERY = 50
 LIST_CACHE_PATH = OUTPUT_DIR / "projects_from_api.json"
 DETAILS_ERROR_PATH = OUTPUT_DIR / "projects_details_errors.jsonl"
@@ -555,10 +555,8 @@ def main() -> None:
 
                     time.sleep(DETAIL_SLEEP_SECONDS)
 
-            # Clear seen sets to free memory - they're rebuilt from JSONL on next iteration
-            seen_ids.clear()
-            seen_slugs.clear()
-            gc.collect()  # Force garbage collection to free memory immediately
+            # Force garbage collection to free memory
+            gc.collect()
 
             next_offset = 0
             if detail_batch_size > 0 and detail_batch_auto and total > 0:
