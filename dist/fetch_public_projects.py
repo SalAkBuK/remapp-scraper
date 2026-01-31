@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import gc
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -553,6 +554,11 @@ def main() -> None:
                         )
 
                     time.sleep(DETAIL_SLEEP_SECONDS)
+
+            # Clear seen sets to free memory - they're rebuilt from JSONL on next iteration
+            seen_ids.clear()
+            seen_slugs.clear()
+            gc.collect()  # Force garbage collection to free memory immediately
 
             next_offset = 0
             if detail_batch_size > 0 and detail_batch_auto and total > 0:
