@@ -407,22 +407,23 @@ def main() -> None:
     if DETAILS_JSONL_PATH.is_file() and not force_detail_refresh:
         try:
             detail_count = 0
-            for raw_line in DETAILS_JSONL_PATH.read_text(encoding="utf-8").splitlines():
-                raw_line = raw_line.strip()
-                if not raw_line:
-                    continue
-                try:
-                    detail = json.loads(raw_line)
-                except json.JSONDecodeError:
-                    continue
-                if isinstance(detail, dict):
-                    detail_count += 1
-                    detail_id = detail.get("fk_project_id") or detail.get("id")
-                    detail_slug = detail.get("slug")
-                    if isinstance(detail_id, int):
-                        seen_ids.add(detail_id)
-                    if isinstance(detail_slug, str):
-                        seen_slugs.add(detail_slug)
+            with DETAILS_JSONL_PATH.open("r", encoding="utf-8") as f:
+                for raw_line in f:
+                    raw_line = raw_line.strip()
+                    if not raw_line:
+                        continue
+                    try:
+                        detail = json.loads(raw_line)
+                    except json.JSONDecodeError:
+                        continue
+                    if isinstance(detail, dict):
+                        detail_count += 1
+                        detail_id = detail.get("fk_project_id") or detail.get("id")
+                        detail_slug = detail.get("slug")
+                        if isinstance(detail_id, int):
+                            seen_ids.add(detail_id)
+                        if isinstance(detail_slug, str):
+                            seen_slugs.add(detail_slug)
             if detail_count > 0:
                 print(f"Loaded {detail_count} existing IDs from {DETAILS_JSONL_PATH} (memory-efficient mode)")
         except OSError:
@@ -565,72 +566,90 @@ def main() -> None:
             else:
                 break
 
-    # Now that batch processing is complete, load all details from disk for final merge
-    details: List[Dict[str, Any]] = []
-    if DETAILS_JSONL_PATH.is_file():
-        try:
-            for raw_line in DETAILS_JSONL_PATH.read_text(encoding="utf-8").splitlines():
-                raw_line = raw_line.strip()
-                if not raw_line:
-                    continue
-                try:
-                    detail = json.loads(raw_line)
-                except json.JSONDecodeError:
-                    continue
-                if isinstance(detail, dict):
-                    details.append(detail)
-        except OSError:
-            details = []
+    # Only perform the merge if we're not in the middle of batch processing
+    # or if this is the final batch (next_offset == 0 after batch completion)
+    skip_merge = False
+    if detail_batch_size > 0 and detail_batch_auto:
+        batch_state = load_batch_state()
+        state_offset = batch_state.get("next_offset", 0)
+        # Skip merge if we're in the middle of batching (offset is not 0)
+        if batch_until_complete and state_offset != 0:
+            skip_merge = True
+            print(f"Skipping merge step - batch processing incomplete (next offset: {state_offset})")
     
-    print(f"Loaded {len(details)} total details from disk for final merge")
-    
-    details_output_path = OUTPUT_DIR / "projects_details.json"
-    details_output_path.write_text(json.dumps(details, ensure_ascii=True, indent=2))
-    print(f"Saved {len(details)} project details to {details_output_path}")
+    if not skip_merge:
+        # Now that batch processing is complete, load all details from disk for final merge
+        # Use streaming to avoid loading entire file into memory
+        details: List[Dict[str, Any]] = []
+        if DETAILS_JSONL_PATH.is_file():
+            try:
+                with DETAILS_JSONL_PATH.open("r", encoding="utf-8") as f:
+                    for raw_line in f:
+                        raw_line = raw_line.strip()
+                        if not raw_line:
+                            continue
+                        try:
+                            detail = json.loads(raw_line)
+                        except json.JSONDecodeError:
+                            continue
+                        if isinstance(detail, dict):
+                            details.append(detail)
+            except OSError:
+                details = []
+        
+        print(f"Loaded {len(details)} total details from disk for final merge")
+        
+        # Write details.json without indent to save memory
+        details_output_path = OUTPUT_DIR / "projects_details.json"
+        with details_output_path.open("w", encoding="utf-8") as f:
+            json.dump(details, f, ensure_ascii=True)
+        print(f"Saved {len(details)} project details to {details_output_path}")
 
-    details_by_id: Dict[int, Dict[str, Any]] = {}
-    details_by_slug: Dict[str, Dict[str, Any]] = {}
-    details_by_fk: Dict[int, Dict[str, Any]] = {}
-    for detail in details:
-        if not isinstance(detail, dict):
-            continue
-        detail_fk = detail.get("fk_project_id")
-        detail_id = detail_fk or detail.get("id")
-        detail_slug = detail.get("slug")
-        if isinstance(detail_id, int):
-            details_by_id[detail_id] = detail
-        if isinstance(detail_slug, str):
-            details_by_slug[detail_slug] = detail
-        if isinstance(detail_fk, int):
-            details_by_fk[detail_fk] = detail
+        details_by_id: Dict[int, Dict[str, Any]] = {}
+        details_by_slug: Dict[str, Dict[str, Any]] = {}
+        details_by_fk: Dict[int, Dict[str, Any]] = {}
+        for detail in details:
+            if not isinstance(detail, dict):
+                continue
+            detail_fk = detail.get("fk_project_id")
+            detail_id = detail_fk or detail.get("id")
+            detail_slug = detail.get("slug")
+            if isinstance(detail_id, int):
+                details_by_id[detail_id] = detail
+            if isinstance(detail_slug, str):
+                details_by_slug[detail_slug] = detail
+            if isinstance(detail_fk, int):
+                details_by_fk[detail_fk] = detail
 
-    merged: List[Dict[str, Any]] = []
-    for item in all_projects:
-        if not isinstance(item, dict):
-            continue
-        item_id = item.get("id")
-        item_slug = item.get("slug")
-        detail = None
-        if isinstance(item_id, int):
-            detail = details_by_id.get(item_id)
-        if detail is None and isinstance(item_slug, str):
-            detail = details_by_slug.get(item_slug)
-        if detail is None:
-            merged.append(item)
-            continue
-        combined = dict(item)
-        combined["details"] = detail
-        merged.append(combined)
-        if isinstance(item_id, int):
-            details_by_fk[item_id] = detail
+        merged: List[Dict[str, Any]] = []
+        for item in all_projects:
+            if not isinstance(item, dict):
+                continue
+            item_id = item.get("id")
+            item_slug = item.get("slug")
+            detail = None
+            if isinstance(item_id, int):
+                detail = details_by_id.get(item_id)
+            if detail is None and isinstance(item_slug, str):
+                detail = details_by_slug.get(item_slug)
+            if detail is None:
+                merged.append(item)
+                continue
+            combined = dict(item)
+            combined["details"] = detail
+            merged.append(combined)
+            if isinstance(item_id, int):
+                details_by_fk[item_id] = detail
 
-    merged_output_path = OUTPUT_DIR / "projects_merged.json"
-    merged_output_path.write_text(json.dumps(merged, ensure_ascii=True, indent=2))
-    print(f"Saved {len(merged)} merged projects to {merged_output_path}")
+        merged_output_path = OUTPUT_DIR / "projects_merged.json"
+        with merged_output_path.open("w", encoding="utf-8") as f:
+            json.dump(merged, f, ensure_ascii=True)
+        print(f"Saved {len(merged)} merged projects to {merged_output_path}")
 
-    details_by_fk_path = OUTPUT_DIR / "projects_details_by_fk.json"
-    details_by_fk_path.write_text(json.dumps(details_by_fk, ensure_ascii=True, indent=2))
-    print(f"Saved {len(details_by_fk)} details by fk to {details_by_fk_path}")
+        details_by_fk_path = OUTPUT_DIR / "projects_details_by_fk.json"
+        with details_by_fk_path.open("w", encoding="utf-8") as f:
+            json.dump(details_by_fk, f, ensure_ascii=True)
+        print(f"Saved {len(details_by_fk)} details by fk to {details_by_fk_path}")
     
     # Save incremental state for next run
     if incremental_mode and all_projects:
