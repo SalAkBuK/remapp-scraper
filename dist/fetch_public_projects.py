@@ -567,15 +567,19 @@ def main() -> None:
                 break
 
     # Only perform the merge if we're not in the middle of batch processing
-    # or if this is the final batch (next_offset == 0 after batch completion)
+    # Skip merge if:
+    # 1. We're in batch mode (detail_batch_size > 0)
+    # 2. AND we're not at the final batch (next_offset != 0)
     skip_merge = False
-    if detail_batch_size > 0 and detail_batch_auto:
+    if detail_batch_size > 0:
         batch_state = load_batch_state()
         state_offset = batch_state.get("next_offset", 0)
-        # Skip merge if we're in the middle of batching (offset is not 0)
-        if batch_until_complete and state_offset != 0:
+        # Skip merge if next_offset is not 0 (meaning more batches to process)
+        if state_offset != 0:
             skip_merge = True
             print(f"Skipping merge step - batch processing incomplete (next offset: {state_offset})")
+        else:
+            print(f"Performing final merge - all batches complete")
     
     if not skip_merge:
         # Now that batch processing is complete, load all details from disk for final merge
