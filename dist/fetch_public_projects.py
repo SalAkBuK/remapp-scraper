@@ -404,26 +404,35 @@ def main() -> None:
     seen_slugs: set[str] = set()
     
     # Scan the JSONL file to build the "seen" sets without loading full objects
+    # Use regex to extract IDs without parsing entire JSON objects
     if DETAILS_JSONL_PATH.is_file() and not force_detail_refresh:
         try:
+            import re
             detail_count = 0
+            id_pattern = re.compile(r'"(?:fk_project_id|id)":\s*(\d+)')
+            slug_pattern = re.compile(r'"slug":\s*"([^"]+)"')
+            
             with DETAILS_JSONL_PATH.open("r", encoding="utf-8") as f:
                 for raw_line in f:
                     raw_line = raw_line.strip()
                     if not raw_line:
                         continue
-                    try:
-                        detail = json.loads(raw_line)
-                    except json.JSONDecodeError:
-                        continue
-                    if isinstance(detail, dict):
-                        detail_count += 1
-                        detail_id = detail.get("fk_project_id") or detail.get("id")
-                        detail_slug = detail.get("slug")
-                        if isinstance(detail_id, int):
-                            seen_ids.add(detail_id)
-                        if isinstance(detail_slug, str):
-                            seen_slugs.add(detail_slug)
+                    
+                    detail_count += 1
+                    
+                    # Extract ID without parsing JSON
+                    id_match = id_pattern.search(raw_line)
+                    if id_match:
+                        try:
+                            seen_ids.add(int(id_match.group(1)))
+                        except ValueError:
+                            pass
+                    
+                    # Extract slug without parsing JSON
+                    slug_match = slug_pattern.search(raw_line)
+                    if slug_match:
+                        seen_slugs.add(slug_match.group(1))
+            
             if detail_count > 0:
                 print(f"Loaded {detail_count} existing IDs from {DETAILS_JSONL_PATH} (memory-efficient mode)")
         except OSError:
