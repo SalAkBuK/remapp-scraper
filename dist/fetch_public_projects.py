@@ -450,8 +450,23 @@ def main() -> None:
                     "Batch mode: processing "
                     f"{detail_batch_offset + 1}..{batch_end} of {total}"
                 )
-            details_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
-            error_mode = "w" if (force_detail_refresh and detail_batch_offset == 0) else "a"
+            # Determine if we should wipe the file or append
+            # Only wipe if: force_detail_refresh is True AND (offset is 0 AND file doesn't exist or is empty)
+            # This prevents wiping mid-cycle when offset resets to 0 in a loop
+            should_wipe = False
+            if force_detail_refresh and detail_batch_offset == 0:
+                # Check if the file is empty or doesn't exist (truly starting fresh)
+                if not DETAILS_JSONL_PATH.is_file():
+                    should_wipe = True
+                else:
+                    try:
+                        file_size = DETAILS_JSONL_PATH.stat().st_size
+                        should_wipe = (file_size == 0)
+                    except OSError:
+                        should_wipe = True
+            
+            details_mode = "w" if should_wipe else "a"
+            error_mode = "w" if should_wipe else "a"
             
             # Only iterate through the batch slice, not all projects
             batch_projects = all_projects[detail_batch_offset:batch_end] if detail_batch_size > 0 else all_projects
