@@ -106,14 +106,6 @@ npm test
 - See REFRESH_API.md for refresh behavior, responses, and examples.
 - See TROUBLESHOOTING.md for common errors and fixes.
 
-## Public publishing checklist
-
-Before making this repository public:
-
-- Remove .env and any real credentials or API keys.
-- Remove or sanitize dist/*.json and projects.json.bak if they contain real data.
-- Replace any real domains in examples with placeholders.
-- Rotate API keys after publishing if any were ever exposed.
 
 ## License
 
